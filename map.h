@@ -3,9 +3,11 @@
 #include<WinUser.h>
 #include"include.h"
 
-const int WindowWidth = 640;
-const int WindowHeight = 480;
-
+const int WindowWidth = 1280;
+const int WindowHeight = 720;
+const int ID_BUTTON_START = 1;
+const int ID_BUTTON_SETTING = 2;
+const int ID_BUTTON_END = 3;
 //typedef struct tagWNDCLASSA {
 //	UINT style;
 //	WNDPROC lpfnWndProc;
@@ -21,6 +23,9 @@ const int WindowHeight = 480;
 
 HWND set_window(HINSTANCE hInst);
 long long WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+void ToggleView();
+void PaintView(HBITMAP hBitmap, HWND hwnd, int width, int height);
+void WindowChange(HWND hwnd);
 
 class Draw {
 private:
@@ -38,4 +43,8 @@ public:
 	bool GetImage();
 	~Draw();
 };
+
+#define rows 16
+#define cols 16
+
 
