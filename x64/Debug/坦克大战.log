@@ -1,67 +1,11 @@
 ﻿  map.cpp
-D:\C_Project\TankWar\map.cpp(65,29): error C2664: “int wsprintfW(LPWSTR,LPCWSTR,...)”: 无法将参数 1 从“char *[100]”转换为“LPWSTR”
-D:\C_Project\TankWar\map.cpp(65,12): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(333,1): message : 参见“wsprintfW”的声明
-D:\C_Project\TankWar\map.cpp(66,3): error C2065: “map”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(66,31): error C2065: “gg”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(68,2): error C2065: “xlength”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(68,21): error C2065: “worldre”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(69,2): error C2065: “ylength”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(69,20): error C2065: “worldre”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(71,2): error C2065: “hdc4”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(71,15): error C2065: “hh”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(75,27): error C2065: “xlength”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(76,27): error C2065: “ylength”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(78,12): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(78,15): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(78,5): error C3861: “init3”: 找不到标识符
-D:\C_Project\TankWar\map.cpp(79,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(79,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(80,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(80,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(81,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(81,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(81,31): error C2065: “wall”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(82,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(82,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(85,12): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(85,15): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(85,5): error C3861: “init3”: 找不到标识符
-D:\C_Project\TankWar\map.cpp(86,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(86,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(87,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(87,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(88,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(88,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(88,31): error C2065: “soil”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(89,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(89,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(92,12): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(92,15): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(92,5): error C3861: “init3”: 找不到标识符
-D:\C_Project\TankWar\map.cpp(93,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(93,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(94,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(94,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(95,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(95,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(95,31): error C2065: “eagle”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(96,5): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(96,8): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(100,13): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(100,16): error C2065: “obcount”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(100,30): error C2065: “hdc4”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(100,36): error C2065: “map”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(100,5): error C3861: “Drawob”: 找不到标识符
-D:\C_Project\TankWar\map.cpp(103,11): error C2065: “ob”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(103,18): error C2065: “hdc4”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(103,2): error C3861: “Deletob”: 找不到标识符
-D:\C_Project\TankWar\map.cpp(103,38): error C2065: “hh”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(103,42): error C2065: “hdc4”: 未声明的标识符
-D:\C_Project\TankWar\map.cpp(180,14): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(72,15): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(109,14): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(110,14): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
 D:\C_Project\TankWar\map.cpp(205,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
 D:\C_Project\TankWar\map.cpp(205,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
 D:\C_Project\TankWar\map.cpp(206,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
 D:\C_Project\TankWar\map.cpp(206,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
 D:\C_Project\TankWar\map.cpp(207,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
 D:\C_Project\TankWar\map.cpp(207,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+  坦克大战.vcxproj -> D:\C_Project\TankWar\x64\Debug\坦克大战.exe
