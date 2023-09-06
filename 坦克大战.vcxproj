@@ -132,6 +132,7 @@
     <ClCompile Include="manage.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="tank.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
@@ -139,6 +140,7 @@
     <ClInclude Include="manage.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="tank.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,7 +3,7 @@
 #include "map.h"
 
 
-enum WindowState { background, begin, set, end };
+enum WindowState { background, begin, game, set, end };
 
 
 //设立一个Manage类来管理窗口

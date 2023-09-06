@@ -1,11 +1,28 @@
 ﻿  map.cpp
-D:\C_Project\TankWar\map.cpp(72,15): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\map.cpp(109,14): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\map.cpp(110,14): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\map.cpp(205,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
-D:\C_Project\TankWar\map.cpp(205,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\map.cpp(206,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
-D:\C_Project\TankWar\map.cpp(206,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\map.cpp(207,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
-D:\C_Project\TankWar\map.cpp(207,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(73,15): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(135,14): warning C4101: “ps”: 未引用的局部变量
+D:\C_Project\TankWar\map.cpp(255,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
+D:\C_Project\TankWar\map.cpp(255,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(256,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
+D:\C_Project\TankWar\map.cpp(256,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(257,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
+D:\C_Project\TankWar\map.cpp(257,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(185,39): warning C4244: “参数”: 从“T2”转换到“int”，可能丢失数据
+          with
+          [
+              T2=double
+          ]
+D:\C_Project\TankWar\map.cpp(128): message : 查看对正在编译的函数 模板 实例化“void Draw::Drawob<TANK,double>(T1 *,HDC,HBITMAP,T2,T2,int,int,int,int)”的引用
+          with
+          [
+              T1=TANK,
+              T2=double
+          ]
+D:\C_Project\TankWar\map.cpp(185,30): warning C4244: “参数”: 从“T2”转换到“int”，可能丢失数据
+          with
+          [
+              T2=double
+          ]
+D:\C_Project\TankWar\map.cpp(185,25): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(185,19): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
   坦克大战.vcxproj -> D:\C_Project\TankWar\x64\Debug\坦克大战.exe

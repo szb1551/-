@@ -1,26 +1,27 @@
 #include "manage.h"
+#include "tank.h"
 //#include "map.h"
 
 //HBITMAP hBitmap;
 //int width = WindowWidth;
 //int height = WindowHeight;
 
-int mapIndex[rows][cols] = { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2,
-						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2, 3, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2, 3, 2,
-						   2, 3, 3, 3, 2, 3, 1, 3, 2, 3, 3, 3, 2, 2, 3, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2, 3, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2, 3, 2,
-						   2, 3, 3, 3, 2, 3, 1, 3, 2, 3, 3, 3, 2, 2, 3, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2, 3, 2,
-						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2,
-						   1, 2, 2, 2, 2, 3, 2, 3, 2, 2, 2, 2, 1, 2, 3, 2,
-						   2, 3, 2, 3, 2, 3, 3, 3, 2, 3, 2, 3, 2, 2, 3, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2, 3, 2,
-						   2, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 2, 2, 3, 2,
-						   2, 3, 2, 3, 2, 3, 3, 3, 2, 3, 2, 3, 2, 2, 3, 2,
-						   2, 2, 2, 2, 2, 3, 0, 3, 2, 2, 2, 2, 2, 2, 3, 2
+int mapIndex[rows][cols] = { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2,
+						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
+						   2, 3, 3, 3, 2, 3, 1, 3, 2, 3, 3, 3, 2, 3, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
+						   2, 3, 3, 3, 2, 3, 1, 3, 2, 3, 3, 3, 2, 3, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
+						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2,
+						   1, 2, 2, 2, 2, 3, 2, 3, 2, 2, 2, 2, 1, 3, 2, 2,
+						   2, 3, 2, 3, 2, 3, 3, 3, 2, 3, 2, 3, 2, 3, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
+						   2, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 2, 3, 2, 2,
+						   2, 3, 2, 3, 2, 3, 3, 3, 2, 3, 2, 3, 2, 3, 2, 2,
+						   2, 2, 2, 2, 2, 3, 0, 3, 2, 2, 2, 2, 2, 3, 2, 2
 };
 
 
@@ -87,16 +88,52 @@ void Draw::DrawBackground()
 	EndPaint(hwnd, &ps);
 }
 
-void Draw::initworld() {
-	//GetClientRect(hh, &worldre);
+void Draw::InitBackGround()
+{
+	InvalidateRect(hwnd, NULL, TRUE);
 	//隐藏按钮
 	for (int i = 1; i <= ButtonCount; i++)
 	{
 		ShowWindow(GetDlgItem(hwnd, i), SW_HIDE);
 	}
-	HBITMAP map[4];
 	PAINTSTRUCT ps;
 	hdc = BeginPaint(hwnd, &ps);
+	HBITMAP BackGround = (HBITMAP)LoadImage(NULL, L"image/dark.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	HDC hdcMem = CreateCompatibleDC(hdc);
+	HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdcMem, BackGround);
+	if (GetImage(BackGround))
+	{
+		StretchBlt(hdc, 0, 0, NowWidth, NowHeight, hdcMem, 0, 0, ImageWidth, ImageHeight, SRCCOPY);
+	}
+	SelectObject(hdcMem, hOldBitmap);
+	DeleteDC(hdcMem);
+	EndPaint(hwnd, &ps);
+}
+
+void Draw::ClearTank()
+{
+
+}
+
+void Draw::DrawTank()
+{
+	hdc = GetDC(hwnd);
+	HBITMAP Friend = (HBITMAP)LoadImage(NULL, L"image/mytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	HBITMAP Enemy = (HBITMAP)LoadImage(NULL, L"image/ememytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	double xlength = (double)NowWidth / (cols);
+	double ylength = (double)NowHeight / (rows + 1);
+	TANK player(rows - 1, 4, up);
+	player.Update(xlength, ylength);
+	cout << "开始绘制坦克" << endl;
+	Drawob(&player, hdc, Friend, xlength, ylength,0,200,130,110);
+	ReleaseDC(hwnd, hdc);
+}
+
+void Draw::initworld() {
+	//GetClientRect(hh, &worldre);
+	HBITMAP map[4];
+	PAINTSTRUCT ps;
+	//hdc = BeginPaint(hwnd, &ps);
 	for (int i = 0; i < 4; i++)
 	{
 		int filenamesize = swprintf(NULL, 0, L"image/myobject%d_66.bmp", i);
@@ -106,9 +143,9 @@ void Draw::initworld() {
 		map[i] = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);//加载图片的函数
 		delete[]filename;
 	}
-	int xlength = (double)NowWidth/(cols);
-	int ylength = (double)NowHeight/(rows+1);
-	int x, y;
+	double xlength = (double)NowWidth/(cols);
+	double ylength = (double)NowHeight/(rows+1);
+	double x, y;
 	HDC hdc = GetDC(hwnd);
 	object ob;
 	cout << "进入创建世界了" << endl;
@@ -131,24 +168,37 @@ void Draw::initworld() {
 			ob.y = y;
 			ob.mapcol = colNum;
 			ob.maprow = rowNum;
-			Drawob(&ob, hdc, map[thing], xlength, ylength);
+			if(thing!=sail)
+				Drawob(&ob, hdc, map[thing], xlength, ylength);
 		}
 	}
-	DeleteDC(hdc);
+	//DeleteDC(hdc);
 	//Deletob(&ob[0], hdc4);   
-	//ReleaseDC(hwnd, hdc);
-	EndPaint(hwnd, &ps);
+	ReleaseDC(hwnd, hdc);
+	//EndPaint(hwnd, &ps);
 }
 
-void Draw::Drawob(object* b, HDC hdc, HBITMAP h2, int xlength, int ylength) {
+template<typename T1, typename T2> void Draw::Drawob(T1* b, HDC hdc, HBITMAP h2, T2 xlength, T2 ylength, int x1, int y1, int w1, int h1) {
 	HDC hmemdc = CreateCompatibleDC(hdc);
 	SelectObject(hmemdc, h2);
 	//StretchBlt(hdc, b->x, b->y, 2 * xlength, 2 * ylength, hmemdc, 290, 0, 60, 60, SRCCOPY);
-	StretchBlt(hdc, b->x, b->y, xlength, ylength, hmemdc, 220, 0, 100, 120, SRCCOPY);
+	StretchBlt(hdc, b->x, b->y, xlength, ylength, hmemdc, x1, y1, w1, h1, SRCCOPY);
 	DeleteObject(hmemdc);
 }
 
 bool Draw::GetImage() 
+{
+	BITMAP bmp;
+	GetObject(hBitmap, sizeof(BITMAP), &bmp);
+
+	ImageWidth = bmp.bmWidth;
+	ImageHeight = bmp.bmHeight;
+	if (ImageWidth == 0 || ImageHeight == 0)
+		return false;
+	return true;
+}
+
+bool Draw::GetImage(HBITMAP hBitmap)
 {
 	BITMAP bmp;
 	GetObject(hBitmap, sizeof(BITMAP), &bmp);

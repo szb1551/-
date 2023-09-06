@@ -33,7 +33,17 @@ void ManageWindow::PaintView()
 		draw->DrawBackground();
 	else if (windowstate == WindowState::begin)
 	{
+		draw->InitBackGround();
 		draw->initworld();
+		draw->DrawTank();
+		windowstate = game;
+	}
+	else if (windowstate == WindowState::game)
+	{
+
+		cout << "½øÈëgameÁË" << endl;
+		draw->initworld();
+		draw->DrawTank();
 	}
 	delete draw;
 }
