@@ -1,6 +1,7 @@
 #include"manage.h"
 //#include"map.h"
-
+//ALL_TANK all_T;
+Player* PA = new Player(rows - 1, 4, up);
 ManageWindow::ManageWindow(HWND hwnd, HBITMAP hBitmap, int width, int height)
 {
 	this->hwnd = hwnd;
@@ -35,17 +36,27 @@ void ManageWindow::PaintView()
 	{
 		draw->InitBackGround();
 		draw->initworld();
-		draw->DrawTank();
+		draw->DrawTank(PA);
 		windowstate = game;
 	}
 	else if (windowstate == WindowState::game)
 	{
-
-		cout << "½øÈëgameÁË" << endl;
 		draw->initworld();
-		draw->DrawTank();
+		draw->DrawTank(PA);
 	}
 	delete draw;
+}
+
+void ManageWindow::ChangeWorld(Direction dir)
+{
+	if (dir != PA->direction)
+	{
+		PA->direction = dir;
+		PA->change_dir = true;
+	}
+	else
+		PA->change_dir = false;
+	InvalidateRect(hwnd, NULL, TRUE);
 }
 
 void ManageWindow::Update()

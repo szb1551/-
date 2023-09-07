@@ -1,5 +1,6 @@
 #pragma once
 #include"include.h"
+#include"player.h"
 
 const int WindowWidth = 1280;
 const int WindowHeight = 720;
@@ -55,9 +56,9 @@ public:
 	void DrawBackground(); //加载开始界面背景
 	void InitBackGround(); //加载游戏界面背景
 	void initworld(); //游戏内容初=初始化
-	void DrawTank(); //绘制坦克
+	void DrawTank(TANK*tank); //绘制坦克
 	void ClearTank(); //删除坦克
-	template<typename T1, typename T2> void Drawob(T1* b, HDC hdc, HBITMAP h2, T2 xlength, T2 ylength, int x1 = 220, int y1 = 0, int w1 = 110, int h1 = 120);
+	template<typename T1, typename T2> void Drawob(T1* b, HDC& hdc, HBITMAP h2, T2 xlength, T2 ylength, int x1 = 220, int y1 = 0, int w1 = 110, int h1 = 120);
 	bool GetImage();
 	bool GetImage(HBITMAP hBlt);
 	~Draw();

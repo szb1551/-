@@ -1,7 +1,5 @@
 #pragma once
-#include "include.h"
 #include "map.h"
-
 
 enum WindowState { background, begin, game, set, end };
 
@@ -30,5 +28,5 @@ public:
 	void ToggleEndView();//点击结束按钮
 	void ToggleView();//TODO
 	void WindowChange();//改变窗口大小时，更改其它物体坐标
-	
+	void ChangeWorld(Direction dir);//改变世界，移动等操作
 };

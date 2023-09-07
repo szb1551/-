@@ -2,20 +2,40 @@
 #include"include.h"
 
 
-enum Direction{up, down,left,right};
+enum Direction{up, down,right,left};
+
+//class ALL_TANK
+//{
+//private:
+//	TANK* al_tank[10];
+//public:
+//	
+//	int tank_num=0;
+//	void Insert_tank(TANK* tank)
+//	{
+//		al_tank[tank_num] = tank;
+//		tank_num++;
+//	}
+//};
 
 class TANK {
 private:
 	//int count4;
-	double xverb;
-	double yverb;
+	double xlength;
+	double ylength;
+	HBITMAP hBlt;
+	int step = 4;//走过一个地图单元要花费的步数
 public:
+	bool change_dir = true;
 	double x;
 	double y;
-	int maprow;
-	int mapcol;
+	float maprow;
+	float mapcol;
 	Direction direction;
 	int life;
 	TANK(int x1, int y1, Direction dir);
-	void Update(double xlength, double ylength);
+	virtual void Update(double xlength, double ylength); //更新窗口坐标
+	virtual void Update();// 更新内部参数
+	virtual void DRAWONE(HDC& hdc);
+	virtual void MOVE();
 };

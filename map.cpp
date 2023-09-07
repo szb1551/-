@@ -115,17 +115,16 @@ void Draw::ClearTank()
 
 }
 
-void Draw::DrawTank()
+void Draw::DrawTank(TANK*tank)
 {
 	hdc = GetDC(hwnd);
-	HBITMAP Friend = (HBITMAP)LoadImage(NULL, L"image/mytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-	HBITMAP Enemy = (HBITMAP)LoadImage(NULL, L"image/ememytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	/*HBITMAP Friend = (HBITMAP)LoadImage(NULL, L"image/mytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	HBITMAP Enemy = (HBITMAP)LoadImage(NULL, L"image/ememytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);*/
 	double xlength = (double)NowWidth / (cols);
 	double ylength = (double)NowHeight / (rows + 1);
-	TANK player(rows - 1, 4, up);
-	player.Update(xlength, ylength);
-	cout << "开始绘制坦克" << endl;
-	Drawob(&player, hdc, Friend, xlength, ylength,0,200,130,110);
+	//TANK player(rows - 1, 4, up);
+	tank->Update(xlength, ylength);
+	tank->DRAWONE(hdc);
 	ReleaseDC(hwnd, hdc);
 }
 
@@ -133,7 +132,7 @@ void Draw::initworld() {
 	//GetClientRect(hh, &worldre);
 	HBITMAP map[4];
 	PAINTSTRUCT ps;
-	//hdc = BeginPaint(hwnd, &ps);
+	hdc = BeginPaint(hwnd, &ps);
 	for (int i = 0; i < 4; i++)
 	{
 		int filenamesize = swprintf(NULL, 0, L"image/myobject%d_66.bmp", i);
@@ -175,10 +174,10 @@ void Draw::initworld() {
 	//DeleteDC(hdc);
 	//Deletob(&ob[0], hdc4);   
 	ReleaseDC(hwnd, hdc);
-	//EndPaint(hwnd, &ps);
+	EndPaint(hwnd, &ps);
 }
 
-template<typename T1, typename T2> void Draw::Drawob(T1* b, HDC hdc, HBITMAP h2, T2 xlength, T2 ylength, int x1, int y1, int w1, int h1) {
+template<typename T1, typename T2> void Draw::Drawob(T1* b, HDC& hdc, HBITMAP h2, T2 xlength, T2 ylength, int x1, int y1, int w1, int h1) {
 	HDC hmemdc = CreateCompatibleDC(hdc);
 	SelectObject(hmemdc, h2);
 	//StretchBlt(hdc, b->x, b->y, 2 * xlength, 2 * ylength, hmemdc, 290, 0, 60, 60, SRCCOPY);
