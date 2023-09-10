@@ -1,10 +1,12 @@
 #include "manage.h"
 #include "tank.h"
+#include "collide.h"
 //#include "map.h"
 
 //HBITMAP hBitmap;
 //int width = WindowWidth;
 //int height = WindowHeight;
+AllObjects All_Ob;
 
 int mapIndex[rows][cols] = { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2,
 						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2,
@@ -30,12 +32,13 @@ Draw::Draw(HBITMAP hBit, HWND hw)
 	hBitmap = hBit;
 	hwnd = hw;
 }
-Draw::Draw(HBITMAP hBit, HWND hw, int width, int height)
+Draw::Draw(HBITMAP hBit, HWND hw, HDC  hdc, int width, int height)
 {
 	hBitmap = hBit;
 	hwnd = hw;
 	NowWidth = width;
 	NowHeight = height;
+	this->hdc = hdc;
 }
 Draw::Draw(const Draw& draw)
 {
@@ -59,11 +62,9 @@ BOOL CALLBACK Draw::EnumChildProc(HWND hwndChild, LPARAM lParam)
 
 void Draw::DrawBackground()
 {
-	PAINTSTRUCT ps;
-	hdc = BeginPaint(hwnd, &ps);
 	//创建内存设备上下文
-	HDC hdcMem = CreateCompatibleDC(hdc);
-	HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdcMem, hBitmap);
+	hdc2 = CreateCompatibleDC(hdc);
+	HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdc2, hBitmap);
 
 	// 绘制按钮
 	cout << "绘制按钮" << endl;
@@ -78,25 +79,40 @@ void Draw::DrawBackground()
 	if (GetImage())
 	{
 		cout << "读取图像成功" << endl;
-		StretchBlt(hdc, 0, 0, NowWidth, NowHeight, hdcMem, 0, 0, ImageWidth, ImageHeight, SRCCOPY);
+		StretchBlt(hdc, 0, 0, NowWidth, NowHeight, hdc2, 0, 0, ImageWidth, ImageHeight, SRCCOPY);
 	}
 	//绘制图像
-	//BitBlt(hdc, 0, 0, 1284, 588, hdcMem, 0, 0, SRCCOPY);
 	//清理资源
-	SelectObject(hdcMem, hOldBitmap);
-	DeleteDC(hdcMem);
-	EndPaint(hwnd, &ps);
+	SelectObject(hdc2, hOldBitmap);
+	DeleteDC(hdc2);
 }
 
 void Draw::InitBackGround()
 {
-	InvalidateRect(hwnd, NULL, TRUE);
+	//InvalidateRect(hwnd, NULL, TRUE);
 	//隐藏按钮
 	for (int i = 1; i <= ButtonCount; i++)
 	{
 		ShowWindow(GetDlgItem(hwnd, i), SW_HIDE);
 	}
-	PAINTSTRUCT ps;
+	//HDC hdc = GetDC(hwnd);
+	/*PAINTSTRUCT ps;
+	hdc = BeginPaint(hwnd, &ps);*/
+	//hdc2 = CreateCompatibleDC(hdc);
+	// 创建黑色画刷
+	HBRUSH hBlackBrush = CreateSolidBrush(RGB(0, 0, 0));
+	// 设置窗口背景画刷
+	RECT rect = { 0, 0, NowWidth, NowHeight };
+	FillRect(hdc2, &rect, hBlackBrush);
+	//Rectangle(hdcmem, 0, 0, NowWidth, NowHeight);
+	//BitBlt(hdc, 0, 0, NowWidth, NowHeight, hdc2, 0, 0, SRCCOPY);
+	//swap(hdc, hdcmem);
+	//swap(hdc, hdc2);
+	//ReleaseDC(hwnd, hdc);
+	//EndPaint(hwnd, &ps);
+
+	//加载背景的话，使用下述方法
+	/*PAINTSTRUCT ps;
 	hdc = BeginPaint(hwnd, &ps);
 	HBITMAP BackGround = (HBITMAP)LoadImage(NULL, L"image/dark.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	HDC hdcMem = CreateCompatibleDC(hdc);
@@ -107,7 +123,7 @@ void Draw::InitBackGround()
 	}
 	SelectObject(hdcMem, hOldBitmap);
 	DeleteDC(hdcMem);
-	EndPaint(hwnd, &ps);
+	EndPaint(hwnd, &ps);*/
 }
 
 void Draw::ClearTank()
@@ -117,22 +133,21 @@ void Draw::ClearTank()
 
 void Draw::DrawTank(TANK*tank)
 {
-	hdc = GetDC(hwnd);
+	//hdc = GetDC(hwnd);
 	/*HBITMAP Friend = (HBITMAP)LoadImage(NULL, L"image/mytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	HBITMAP Enemy = (HBITMAP)LoadImage(NULL, L"image/ememytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);*/
 	double xlength = (double)NowWidth / (cols);
 	double ylength = (double)NowHeight / (rows + 1);
 	//TANK player(rows - 1, 4, up);
 	tank->Update(xlength, ylength);
-	tank->DRAWONE(hdc);
-	ReleaseDC(hwnd, hdc);
+	tank->DRAWONE(hdc2);
+	//ReleaseDC(hwnd, hdc);
 }
 
-void Draw::initworld() {
+void Draw::InitWorld() {
 	//GetClientRect(hh, &worldre);
 	HBITMAP map[4];
 	PAINTSTRUCT ps;
-	hdc = BeginPaint(hwnd, &ps);
 	for (int i = 0; i < 4; i++)
 	{
 		int filenamesize = swprintf(NULL, 0, L"image/myobject%d_66.bmp", i);
@@ -145,8 +160,7 @@ void Draw::initworld() {
 	double xlength = (double)NowWidth/(cols);
 	double ylength = (double)NowHeight/(rows+1);
 	double x, y;
-	HDC hdc = GetDC(hwnd);
-	object ob;
+	Object ob;
 	cout << "进入创建世界了" << endl;
 	for (int rowNum = 0; rowNum < rows; rowNum++) {
 		//MessageBox(hwnd,L"S",L"S",NULL);
@@ -163,26 +177,80 @@ void Draw::initworld() {
 			else if (thing == eagle) {
 				ob.life = 1;
 			}
-			ob.x = x;
-			ob.y = y;
-			ob.mapcol = colNum;
-			ob.maprow = rowNum;
+			Point point(rowNum, colNum);
+			Rect rect(x,y,xlength,ylength);
+			ob.rect = rect;
+			ob.point = point;
+			All_Ob.Insert(ob);
 			if(thing!=sail)
-				Drawob(&ob, hdc, map[thing], xlength, ylength);
+				Drawob(&ob, hdc2, map[thing], xlength, ylength);
 		}
 	}
-	//DeleteDC(hdc);
-	//Deletob(&ob[0], hdc4);   
-	ReleaseDC(hwnd, hdc);
-	EndPaint(hwnd, &ps);
+}
+
+void Draw::ChangeWorld() {
+	//GetClientRect(hh, &worldre);
+	HBITMAP map[4];
+	PAINTSTRUCT ps;
+	for (int i = 0; i < 4; i++)
+	{
+		int filenamesize = swprintf(NULL, 0, L"image/myobject%d_66.bmp", i);
+		WCHAR* filename = new WCHAR[filenamesize + 1];
+		//filename = L"image/myobject%d_66.bmp" % (i);
+		wsprintf(filename, L"image/myobject%d_66.bmp", i);//格式化写入map0/1/2/3.bmp
+		map[i] = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);//加载图片的函数
+		delete[]filename;
+	}
+	double xlength = (double)NowWidth / (cols);
+	double ylength = (double)NowHeight / (rows + 1);
+	double x, y;
+	Object ob;
+	cout << "进入游戏世界了" << endl;
+	for (int rowNum = 0; rowNum < rows; rowNum++) {
+		//MessageBox(hwnd,L"S",L"S",NULL);
+		for (int colNum = 0; colNum < cols; colNum++) {
+			x = (colNum)*xlength;//贴图所在横坐标			
+			y = (rowNum)*ylength;//贴图所在纵坐标	
+			int thing = mapIndex[rowNum][colNum];
+			if (thing == wall) {
+				ob.life = 4;
+			}
+			else if (thing == food) {
+				ob.life = 1;
+			}
+			else if (thing == eagle) {
+				ob.life = 1;
+			}
+			Point point(rowNum, colNum);
+			Rect rect(x, y, xlength, ylength);
+			ob.rect = rect;
+			ob.point = point;
+			if (thing != sail)
+				Drawob(&ob, hdc2, map[thing], xlength, ylength);
+		}
+	}
 }
 
 template<typename T1, typename T2> void Draw::Drawob(T1* b, HDC& hdc, HBITMAP h2, T2 xlength, T2 ylength, int x1, int y1, int w1, int h1) {
-	HDC hmemdc = CreateCompatibleDC(hdc);
+	HDC hmemdc = CreateCompatibleDC(hdc2);
 	SelectObject(hmemdc, h2);
-	//StretchBlt(hdc, b->x, b->y, 2 * xlength, 2 * ylength, hmemdc, 290, 0, 60, 60, SRCCOPY);
-	StretchBlt(hdc, b->x, b->y, xlength, ylength, hmemdc, x1, y1, w1, h1, SRCCOPY);
+	StretchBlt(hdc2, b->rect.x, b->rect.y, xlength, ylength, hmemdc, x1, y1, w1, h1, SRCCOPY);
 	DeleteObject(hmemdc);
+}
+
+void Draw::BeginBufferHdc()
+{
+	hdc = GetDC(hwnd);
+	hdc2 = CreateCompatibleDC(hdc);
+	hBitmap = CreateCompatibleBitmap(hdc, NowWidth, NowHeight);
+	SelectObject(hdc2, hBitmap);
+}
+
+void Draw::EndBufferHdc()
+{
+	BitBlt(hdc, 0, 0, NowWidth, NowHeight, hdc2, 0, 0, SRCCOPY);
+	DeleteDC(hdc2);
+	ReleaseDC(hwnd, hdc);
 }
 
 bool Draw::GetImage() 
@@ -215,28 +283,6 @@ Draw::~Draw()
 
 
 
-//void PaintView(HBITMAP hBitmap, HWND hwnd, int width, int height)
-//{
-//	Draw draw(hBitmap, hwnd, width, height);
-//	draw.DrawBackground();
-//	draw.~Draw();
-//}
-//
-//void WindowChange(HWND hwnd, int &width, int &height)
-//{
-//	RECT rc;
-//	GetWindowRect(hwnd, &rc);
-//	width = rc.right - rc.left;
-//	height = rc.bottom - rc.top;
-//	int buttonx = width / 2 - 50;
-//	int buttony = height * 0.8 - 15;
-//	SetWindowPos(GetDlgItem(hwnd, ID_BUTTON_START), NULL, buttonx, buttony, 100, 30, SWP_SHOWWINDOW);
-//	SetWindowPos(GetDlgItem(hwnd, ID_BUTTON_SETTING), NULL, buttonx, buttony+30, 100, 30, SWP_SHOWWINDOW);
-//	SetWindowPos(GetDlgItem(hwnd, ID_BUTTON_END), NULL, buttonx, buttony+60, 100, 30, SWP_SHOWWINDOW);
-//	InvalidateRect(hwnd, NULL, TRUE);
-//}
-
-
 HWND set_window(HINSTANCE hInst)
 {
 	WNDCLASSEXW wc;
@@ -245,28 +291,14 @@ HWND set_window(HINSTANCE hInst)
 	wc.lpszClassName = L"WindowClassName";
 	wc.hInstance = hInst;
 	wc.lpfnWndProc = WndProc;
+	wc.style = CS_HREDRAW | CS_VREDRAW;
 	RegisterClassExW(&wc);
 	HWND hwnd = CreateWindowW(L"WindowClassName", L"你好", WS_VISIBLE | WS_OVERLAPPEDWINDOW, 100, 100, WindowWidth, WindowHeight, NULL, NULL, hInst, NULL);
 	if (hwnd == NULL) return (HWND) - 1;
-	/*Draw draw(hBitmap, hwnd, WindowWidth, WindowHeight);
-	draw.DrawBackground();
-	draw.~Draw();*/
 	HWND hButton1 = CreateWindow(L"Button", L"开始游戏", WS_CHILD | WS_VISIBLE, WindowWidth *0.45, WindowHeight *0.8, 100, 30, hwnd, (HMENU)ID_BUTTON_START, NULL, NULL);
 	HWND hButton2 = CreateWindow(L"Button", L"设置", WS_CHILD | WS_VISIBLE, WindowWidth * 0.45, WindowHeight * 0.8+30, 100, 30, hwnd, (HMENU)ID_BUTTON_SETTING, NULL, NULL);
 	HWND hButton3 = CreateWindow(L"Button", L"退出游戏", WS_CHILD | WS_VISIBLE, WindowWidth * 0.45, WindowHeight * 0.8+60, 100, 30, hwnd, (HMENU)ID_BUTTON_END, NULL, NULL);
 
-	//ShowWindow(hwnd, SW_SHOWDEFAULT);
-	//UpdateWindow(hwnd);
 
 	return hwnd;
-	//MSG msg;
-	//while (true) if (GetMessage(&msg, NULL, 0, 0))
-	//{
-	//	//cout << msg.message;
-	//	if (msg.message == WM_QUIT) {
-	//		break;
-	//	}
-	//	TranslateMessage(&msg);
-	//	DispatchMessage(&msg);
-	//}
 }

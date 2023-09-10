@@ -4,6 +4,21 @@
 
 enum Direction{up, down,right,left};
 
+
+struct Rect
+{
+	int x;
+	int y;
+	double width;
+	double height;
+	Rect(int x, int y, double width, double height) :x(x), y(y), width(width), height(height) {};
+	Rect() {};
+	friend ostream& operator<<(ostream&os, const Rect& rect)
+	{
+		os << rect.x << ' ' << rect.y << ' ' << rect.width << ' ' << rect.height;
+		return os;
+	}
+};
 //class ALL_TANK
 //{
 //private:
@@ -38,4 +53,5 @@ public:
 	virtual void Update();// 更新内部参数
 	virtual void DRAWONE(HDC& hdc);
 	virtual void MOVE();
+	virtual bool Collide(Rect& rect);
 };

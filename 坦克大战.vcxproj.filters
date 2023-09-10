@@ -33,6 +33,9 @@
     <ClCompile Include="tank.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="collide.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="player.h">
@@ -51,6 +54,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="tank.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="collide.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

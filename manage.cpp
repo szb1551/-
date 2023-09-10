@@ -1,6 +1,8 @@
 #include"manage.h"
+#include "collide.h"
 //#include"map.h"
-//ALL_TANK all_T;
+
+extern AllObjects All_Ob; //外部引用范例
 Player* PA = new Player(rows - 1, 4, up);
 ManageWindow::ManageWindow(HWND hwnd, HBITMAP hBitmap, int width, int height)
 {
@@ -28,23 +30,32 @@ BOOL CALLBACK ManageWindow::EnumChildProc(HWND hwndChild, LPARAM lParam)
 
 void ManageWindow::PaintView()
 {
+	PAINTSTRUCT ps;
+	HDC hdc = BeginPaint(hwnd, &ps);
 	cout << NowWindowWidth << " " << NowWindowHeight << endl;
-	draw = new Draw(hBitmap, hwnd, NowWindowWidth, NowWindowHeight);
+	draw = new Draw(hBitmap, hwnd, hdc, NowWindowWidth, NowWindowHeight);
 	if (windowstate == background)
 		draw->DrawBackground();
 	else if (windowstate == WindowState::begin)
 	{
+		draw->BeginBufferHdc();
 		draw->InitBackGround();
-		draw->initworld();
+		draw->InitWorld();
+		All_Ob.show();
 		draw->DrawTank(PA);
+		draw->EndBufferHdc();
 		windowstate = game;
 	}
 	else if (windowstate == WindowState::game)
 	{
-		draw->initworld();
+		draw->BeginBufferHdc();
+		draw->InitBackGround();
+		draw->ChangeWorld();
 		draw->DrawTank(PA);
+		draw->EndBufferHdc();
 	}
 	delete draw;
+	EndPaint(hwnd, &ps);
 }
 
 void ManageWindow::ChangeWorld(Direction dir)
