@@ -136,8 +136,8 @@ void Draw::DrawTank(TANK*tank)
 	//hdc = GetDC(hwnd);
 	/*HBITMAP Friend = (HBITMAP)LoadImage(NULL, L"image/mytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	HBITMAP Enemy = (HBITMAP)LoadImage(NULL, L"image/ememytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);*/
-	double xlength = (double)NowWidth / (cols);
-	double ylength = (double)NowHeight / (rows + 1);
+	double xlength = (double)NowWidth / (rows);
+	double ylength = (double)NowHeight / (cols+1);
 	//TANK player(rows - 1, 4, up);
 	tank->Update(xlength, ylength);
 	tank->DRAWONE(hdc2);
@@ -183,7 +183,8 @@ void Draw::InitWorld() {
 			ob.point = point;
 			All_Ob.Insert(ob);
 			if(thing!=sail)
-				Drawob(&ob, hdc2, map[thing], xlength, ylength);
+				Rectangle(hdc2, x, y, x + xlength, y + ylength);
+				//Drawob(&ob, hdc2, map[thing], xlength, ylength);
 		}
 	}
 }
@@ -201,8 +202,8 @@ void Draw::ChangeWorld() {
 		map[i] = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);//加载图片的函数
 		delete[]filename;
 	}
-	double xlength = (double)NowWidth / (cols);
-	double ylength = (double)NowHeight / (rows + 1);
+	double xlength = (double)NowWidth / (rows);
+	double ylength = (double)NowHeight / (cols+1);
 	double x, y;
 	Object ob;
 	cout << "进入游戏世界了" << endl;

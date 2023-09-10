@@ -36,7 +36,7 @@ struct Object {
 };
 
 const int WindowWidth = 1280;
-const int WindowHeight = 720;
+const int WindowHeight = 765;
 const int ID_BUTTON_START = 1;
 const int ID_BUTTON_SETTING = 2;
 const int ID_BUTTON_END = 3;

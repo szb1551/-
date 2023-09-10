@@ -12,7 +12,7 @@ TANK::TANK(int x, int y, Direction dir)
 	mapcol = y;
 	direction = dir;
 	xlength = (double)WindowWidth / rows;
-	ylength = (double)WindowHeight / (cols + 1);
+	ylength = (double)WindowHeight / (cols+1);
 	this->x = (int)mapcol * xlength;
 	this->y = (int)maprow * ylength;
 	cout <<"坦克初始化坐标"<<this->x <<' '<<this->y << endl;
@@ -25,43 +25,73 @@ void TANK::Update(double xlength, double ylength)
 	this->ylength = ylength;
 }
 
+void TANK::CanRun(bool& can_run, int xflag1, int xflag2, int yflag1, int yflag2)
+{
+	int abscol = mapcol;
+	int absrow = maprow;
+	cout << "当前实际坐标" << absrow << ' ' << abscol << "当前虚拟坐标" << maprow << ' ' << mapcol << endl;
+	double temp_x={}, temp_y={};
+	switch (direction)
+	{
+	case up:
+		temp_y = y - int(1./step * (int)ylength);
+		temp_x = x;
+		break;
+	case down:
+		temp_y = y + int(1./step * (int)ylength);
+		temp_x = x;
+		break;
+	case Direction::left:
+		temp_y = y;
+		temp_x = x - int(1./step * (int)xlength);
+		break;
+	case Direction::right:
+		temp_y = y;
+		cout << (1. / step * (int)xlength) << endl;
+		cout << x << endl;
+		temp_x = x + int(1./step * (int)xlength);
+		cout << temp_x <<round(temp_x)<<endl;
+		break;
+	}
+	Rect rect1(temp_x, temp_y, xlength, ylength);
+	Point p(absrow+xflag1, abscol+yflag1);
+	Point p2(absrow+xflag2, abscol+yflag2);
+	for (int j = 0; j < All_Ob.object_num && can_run; j++)
+	{
+		int temp_row = All_Ob.Objects[j].point.maprow;
+		int temp_col = All_Ob.Objects[j].point.mapcol;
+		if ((All_Ob.Objects[j].point == p || All_Ob.Objects[j].point == p2) && mapIndex[temp_row][temp_col] != 2)
+		{
+			if (Collides.Collide(All_Ob.Objects[j].rect, rect1))
+			{
+				can_run = false;
+			}
+		}
+	}
+}
+
 void TANK::Update()
 {
 	if (change_dir == false)
 	{
-		int abscol = mapcol;
-		int absrow = maprow;
-		cout << "当前实际坐标" << absrow << ' ' << abscol << "当前虚拟坐标" << maprow << ' ' << mapcol << endl;
 		bool can_run = true;
 		switch (direction)
 		{
 		case up:
-		{
-			double temp_y = (maprow - 1. / step) * ylength;
-			double temp_x = mapcol * xlength;
-			Rect rect1(temp_x, temp_y, xlength, ylength);
-			Point p(absrow - 1, abscol);
-			Point p2(absrow - 1, abscol + 1);
-			for (int j = 0; j < All_Ob.object_num; j++)
-			{
-				int temp_row = All_Ob.Objects[j].point.maprow;
-				int temp_col = All_Ob.Objects[j].point.mapcol;
-				if ((All_Ob.Objects[j].point == p|| All_Ob.Objects[j].point == p2) &&mapIndex[temp_row][temp_col]!=2)
-				{
-					if (Collides.Collide(All_Ob.Objects[j].rect, rect1))
-					{
-						can_run = false;
-						break;
-					}
-				}
-			}
-		}
+			if (maprow <= 0) can_run = false;
+			CanRun(can_run, -1, -1, 0, 1);
 			break;
 		case down:
+			if (maprow >= rows-1) can_run = false;
+			CanRun(can_run, 1, 1, 0, 1);
 			break;
 		case Direction::left:
+			if (mapcol <= 0) can_run = false;
+			CanRun(can_run, 0, -1, -1, -1);
 			break;
 		case Direction::right:
+			if (mapcol >= cols - 1) can_run = false;
+			CanRun(can_run, 0, 1, 1, 1);
 			break;
 		}
 		if(can_run)
@@ -69,11 +99,19 @@ void TANK::Update()
 	}
 	this->x = mapcol * xlength;
 	this->y = maprow * ylength;
+	show();
+}
+
+void TANK::show()
+{
+	cout << "当前坦克坐标" << endl;
+	cout << x << ' ' << y << ' ' << xlength << ' ' << ylength << endl;
+	cout << "当前虚拟坐标" << maprow <<' '<< mapcol << endl;
 }
 
 bool TANK::Collide(Rect&rect)
 {
-	if (!(x > rect.x + rect.width || y > rect.y + rect.height || x + xlength < rect.x || y + ylength < rect.y))
+	if (!(x > rect.x + (int)rect.width || y > rect.y + (int)rect.height || x + (int)xlength < rect.x || y + (int)ylength < rect.y))
 	{
 		cout << true << endl;
 		return true;
@@ -111,15 +149,19 @@ void TANK::MOVE()
 	{
 	case up:
 		this->maprow -= 1./step;
+		if (this->maprow <= 0) this->maprow = 0;
 		break;
 	case down:
 		this->maprow += 1. / step;
+		if (this->maprow >= rows - 1) this->maprow = rows - 1;
 		break;
 	case Direction::left:
 		this->mapcol -= 1. / step;
+		if (this->mapcol <= 0) this->mapcol = 0;
 		break;
 	case Direction::right:
 		this->mapcol += 1. / step;
+		if (this->mapcol >= cols - 1) this->mapcol = cols - 1;
 		break;
 	}
 }
