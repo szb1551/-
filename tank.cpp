@@ -27,10 +27,12 @@ void TANK::Update(double xlength, double ylength)
 
 void TANK::CanRun(bool& can_run, int xflag1, int xflag2, int yflag1, int yflag2)
 {
-	int abscol = mapcol;
-	int absrow = maprow;
-	cout << "当前实际坐标" << absrow << ' ' << abscol << "当前虚拟坐标" << maprow << ' ' << mapcol << endl;
-	double temp_x={}, temp_y={};
+	double temp_x = {}, temp_y = {};
+	int abscol = round(mapcol);
+	int absrow = round(maprow);
+	cout.precision(4);
+	cout << "当前实际坐标" << absrow << ' ' << abscol << "当前虚拟坐标"<< fixed << maprow << ' ' << mapcol << endl;
+	cout << defaultfloat;
 	switch (direction)
 	{
 	case up:
@@ -87,7 +89,7 @@ void TANK::Update()
 			break;
 		case Direction::left:
 			if (mapcol <= 0) can_run = false;
-			CanRun(can_run, 0, -1, -1, -1);
+			CanRun(can_run, 0, 1, -1, -1);
 			break;
 		case Direction::right:
 			if (mapcol >= cols - 1) can_run = false;

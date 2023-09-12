@@ -1,6 +1,7 @@
 #include "manage.h"
 #include "tank.h"
 #include "collide.h"
+#include "include.h"
 //#include "map.h"
 
 //HBITMAP hBitmap;
@@ -293,6 +294,7 @@ HWND set_window(HINSTANCE hInst)
 	wc.hInstance = hInst;
 	wc.lpfnWndProc = WndProc;
 	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.lpszMenuName = MAKEINTRESOURCEW(IDC_WINDOWSPROJECT1);
 	RegisterClassExW(&wc);
 	HWND hwnd = CreateWindowW(L"WindowClassName", L"ÄãºÃ", WS_VISIBLE | WS_OVERLAPPEDWINDOW, 100, 100, WindowWidth, WindowHeight, NULL, NULL, hInst, NULL);
 	if (hwnd == NULL) return (HWND) - 1;

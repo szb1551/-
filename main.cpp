@@ -96,6 +96,7 @@ int main()
 	//ShowWindow(hwnd, SW_SHOW);
 	ShowWindow(hwnd, SW_SHOWDEFAULT);
 	UpdateWindow(hwnd);
+	HACCEL hAccelTable = LoadAccelerators(hInst, MAKEINTRESOURCE(IDC_WINDOWSPROJECT1));
 	MSG msg;
 	while (true) if (GetMessage(&msg, NULL, 0, 0))
 	{
@@ -103,8 +104,11 @@ int main()
 		if (msg.message == WM_QUIT) {
 			break;
 		}
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
 	}
 
 }

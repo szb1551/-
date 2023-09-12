@@ -3,6 +3,7 @@
 
 enum WindowState { background, begin, game, set, end };
 
+#define IDC_WINDOWSPROJECT1 109
 
 //设立一个Manage类来管理窗口
 class ManageWindow
