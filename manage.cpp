@@ -67,6 +67,25 @@ void ManageWindow::ChangeWorld(Direction dir)
 	}
 	else
 		PA->change_dir = false;
+	PA->Update();
+	InvalidateRect(hwnd, NULL, TRUE);
+}
+
+void ManageWindow::ChangeWorld_Fire()
+{
+	if (PA->Get_Bullet_state() == 0)
+	{
+		if (PA->button_fire == false)
+		{
+			PA->button_fire = true;
+			SetTimer(hwnd, 1, 50, NULL);
+		}
+		else
+		{
+			PA->button_fire = false;
+			KillTimer(hwnd, 1);
+		}	
+	}
 	InvalidateRect(hwnd, NULL, TRUE);
 }
 

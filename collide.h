@@ -1,14 +1,7 @@
 #pragma once
 #include "map.h"
 
-struct AllObjects
-{
-	vector<Object> Objects;
-	int object_num = 0;
-	void Insert(Object ob);
-	void Delete(Object ob);
-	void show();
-};
+
 
 class CollideObject
 {

@@ -25,11 +25,40 @@ void TANK::Update(double xlength, double ylength)
 	this->ylength = ylength;
 }
 
+void TANK::Initial_Bullet()
+{
+	bullet.dir = direction;
+	switch (direction)
+	{
+	case up:
+		bullet.point.Set(x + xlength / 2 - bullet.width/2, y);
+		break;
+	case down:
+		bullet.point.Set(x + xlength/2 - bullet.width/2, y+ ylength);
+		break;
+	case Direction::left:
+		bullet.point.Set(x-bullet.width/2, y + ylength / 2 - bullet.height/2);
+		break;
+	case Direction::right:
+		bullet.point.Set(x + xlength-bullet.width/2, y+ylength/2-bullet.height/2);
+		break;
+	}
+	bullet.status = 1;
+	//button_fire = false;
+}
+
+bool TANK::Can_Fire()
+{
+	if (bullet.status == 0 && button_fire==true)
+		return true;
+	return false;
+}
+
 void TANK::CanRun(bool& can_run, int xflag1, int xflag2, int yflag1, int yflag2)
 {
 	double temp_x = {}, temp_y = {};
-	int abscol = round(mapcol);
-	int absrow = round(maprow);
+	int abscol = mapcol;
+	int absrow = maprow;
 	cout.precision(4);
 	cout << "当前实际坐标" << absrow << ' ' << abscol << "当前虚拟坐标"<< fixed << maprow << ' ' << mapcol << endl;
 	cout << defaultfloat;
@@ -72,6 +101,46 @@ void TANK::CanRun(bool& can_run, int xflag1, int xflag2, int yflag1, int yflag2)
 	}
 }
 
+void TANK::CanRun(bool& can_run)
+{
+	double temp_x = {}, temp_y = {};
+	switch (direction)
+	{
+	case up:
+		temp_y = y - int(1. / step * (int)ylength);
+		temp_x = x;
+		break;
+	case down:
+		temp_y = y + int(1. / step * (int)ylength);
+		temp_x = x;
+		break;
+	case Direction::left:
+		temp_y = y;
+		temp_x = x - int(1. / step * (int)xlength);
+		break;
+	case Direction::right:
+		temp_y = y;
+		cout << (1. / step * (int)xlength) << endl;
+		cout << x << endl;
+		temp_x = x + int(1. / step * (int)xlength);
+		cout << temp_x << round(temp_x) << endl;
+		break;
+	}
+	Rect rect1(temp_x, temp_y, xlength, ylength);
+	for (int j = 0; j < All_Ob.object_num && can_run; j++)
+	{
+		int temp_row = All_Ob.Objects[j].point.maprow;
+		int temp_col = All_Ob.Objects[j].point.mapcol;
+		if (mapIndex[temp_row][temp_col] != 2)
+		{
+			if (Collides.Collide(All_Ob.Objects[j].rect, rect1))
+			{
+				can_run = false;
+			}
+		}
+	}
+}
+
 void TANK::Update()
 {
 	if (change_dir == false)
@@ -80,22 +149,37 @@ void TANK::Update()
 		switch (direction)
 		{
 		case up:
-			if (maprow <= 0) can_run = false;
-			CanRun(can_run, -1, -1, 0, 1);
+			if (maprow <= 0)
+			{
+				can_run = false;
+				maprow = 0;
+			}
+			//CanRun(can_run, -1, -1, 0, 1);
 			break;
 		case down:
-			if (maprow >= rows-1) can_run = false;
-			CanRun(can_run, 1, 1, 0, 1);
+			if (maprow >= rows - 1)
+			{
+				can_run = false;
+				maprow = rows - 1;
+			}
+			//CanRun(can_run, 1, 1, 0, 1);
 			break;
 		case Direction::left:
-			if (mapcol <= 0) can_run = false;
-			CanRun(can_run, 0, 1, -1, -1);
+			if (mapcol <= 0) {
+				can_run = false;
+				mapcol = 0;
+			}
+			//CanRun(can_run, 0, 1, -1, -1);
 			break;
 		case Direction::right:
-			if (mapcol >= cols - 1) can_run = false;
-			CanRun(can_run, 0, 1, 1, 1);
+			if (mapcol >= cols - 1 - 3) {
+				can_run = false;
+				mapcol = cols-1-3;
+			}
+			//CanRun(can_run, 0, 1, 1, 1);
 			break;
 		}
+		CanRun(can_run);
 		if(can_run)
 			this->MOVE();
 	}
@@ -121,10 +205,10 @@ bool TANK::Collide(Rect&rect)
 	return false;
 }
 
-void TANK::DRAWONE(HDC& hdc) {
+void TANK::DRAWONE() {
 	HDC hmemdc = CreateCompatibleDC(hdc);
 	SelectObject(hmemdc, hBlt);
-	Update();
+	//Update();
 	switch (direction)
 	{
 	case up:
@@ -142,6 +226,32 @@ void TANK::DRAWONE(HDC& hdc) {
 	}
 	//StretchBlt(hdc, (tank1->x) - xlength, (tank1->y) - ylength, xlength * 2, ylength * 2, hmemdc, 0 + (tank1->direction), 198, 150, 145, SRCCOPY);
 	DeleteObject(hmemdc);
+}
+
+void TANK::DRAWBULLET()
+{
+	HDC hmemdc = CreateCompatibleDC(hdc);
+	HBRUSH hBlackBrush = CreateSolidBrush(RGB(255, 0, 0));
+	//SelectObject(hmemdc, hBlackBrush);
+	RECT rect = { bullet.point.x, bullet.point.y, bullet.point.x+10, bullet.point.y+10 };
+	FillRect(hdc, &rect, hBlackBrush);
+	DeleteDC(hmemdc);
+}
+
+void TANK::Fire()
+{
+	if (Can_Fire())
+	{
+		Initial_Bullet();
+		DRAWBULLET();
+	}
+	else if (bullet.status == 1)
+	{
+		cout << "进入子弹移动" << endl;
+		bullet.Update();
+		cout << bullet.point << endl;
+		DRAWBULLET();
+	}
 }
 
 

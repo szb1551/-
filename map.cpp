@@ -9,22 +9,22 @@
 //int height = WindowHeight;
 AllObjects All_Ob;
 
-int mapIndex[rows][cols] = { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2,
-						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
-						   2, 3, 3, 3, 2, 3, 1, 3, 2, 3, 3, 3, 2, 3, 2, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
-						   2, 3, 3, 3, 2, 3, 1, 3, 2, 3, 3, 3, 2, 3, 2, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
-						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2,
-						   1, 2, 2, 2, 2, 3, 2, 3, 2, 2, 2, 2, 1, 3, 2, 2,
-						   2, 3, 2, 3, 2, 3, 3, 3, 2, 3, 2, 3, 2, 3, 2, 2,
-						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 2,
-						   2, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 2, 3, 2, 2,
-						   2, 3, 2, 3, 2, 3, 3, 3, 2, 3, 2, 3, 2, 3, 2, 2,
-						   2, 2, 2, 2, 2, 3, 0, 3, 2, 2, 2, 2, 2, 3, 2, 2
+int mapIndex[rows][cols] = { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2,
+						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 1, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 1, 2, 2,
+						   2, 3, 3, 3, 2, 3, 1, 3, 2, 3, 3, 3, 2, 1, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 1, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 1, 2, 2,
+						   2, 3, 3, 3, 2, 3, 1, 3, 2, 3, 3, 3, 2, 1, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 1, 2, 2,
+						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2,
+						   1, 2, 2, 2, 2, 3, 2, 3, 2, 2, 2, 2, 1, 1, 2, 2,
+						   2, 3, 2, 3, 2, 3, 3, 3, 2, 3, 2, 3, 2, 1, 2, 2,
+						   2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 1, 2, 2,
+						   2, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 2, 1, 2, 2,
+						   2, 3, 2, 3, 2, 3, 3, 3, 2, 3, 2, 3, 2, 1, 2, 2,
+						   2, 2, 2, 2, 2, 3, 0, 3, 2, 2, 2, 2, 2, 1, 2, 2
 };
 
 
@@ -140,9 +140,16 @@ void Draw::DrawTank(TANK*tank)
 	double xlength = (double)NowWidth / (rows);
 	double ylength = (double)NowHeight / (cols+1);
 	//TANK player(rows - 1, 4, up);
+	tank->SetHDC(hdc2);
 	tank->Update(xlength, ylength);
-	tank->DRAWONE(hdc2);
+	tank->DRAWONE();
+	tank->Fire();
 	//ReleaseDC(hwnd, hdc);
+}
+
+void Draw::DrawBullet(Bullet* bullet)
+{
+	bullet->Move();
 }
 
 void Draw::InitWorld() {
@@ -169,10 +176,10 @@ void Draw::InitWorld() {
 			x = (colNum) * xlength;//贴图所在横坐标			
 			y = (rowNum) * ylength;//贴图所在纵坐标	
 			int thing = mapIndex[rowNum][colNum];
-			if (thing == wall) {
+			if (thing == iron) {
 				ob.life = 4;
  			}
-			else if (thing == food) {
+			else if (thing == wall) {
 				ob.life = 1;
 			}
 			else if (thing == eagle) {
@@ -208,28 +215,12 @@ void Draw::ChangeWorld() {
 	double x, y;
 	Object ob;
 	cout << "进入游戏世界了" << endl;
-	for (int rowNum = 0; rowNum < rows; rowNum++) {
-		//MessageBox(hwnd,L"S",L"S",NULL);
-		for (int colNum = 0; colNum < cols; colNum++) {
-			x = (colNum)*xlength;//贴图所在横坐标			
-			y = (rowNum)*ylength;//贴图所在纵坐标	
-			int thing = mapIndex[rowNum][colNum];
-			if (thing == wall) {
-				ob.life = 4;
-			}
-			else if (thing == food) {
-				ob.life = 1;
-			}
-			else if (thing == eagle) {
-				ob.life = 1;
-			}
-			Point point(rowNum, colNum);
-			Rect rect(x, y, xlength, ylength);
-			ob.rect = rect;
-			ob.point = point;
-			if (thing != sail)
-				Drawob(&ob, hdc2, map[thing], xlength, ylength);
-		}
+	for (int i = 0; i < All_Ob.object_num; i++)
+	{
+		Point point = All_Ob.Objects[i].point;
+		Rect rect = All_Ob.Objects[i].rect;
+		int thing = mapIndex[point.maprow][point.mapcol];
+		Drawob(&All_Ob.Objects[i], hdc2, map[thing], xlength, ylength);
 	}
 }
 

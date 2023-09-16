@@ -1,29 +1,38 @@
 ﻿D:\Visual_Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output 目录未以斜杠结尾。  此生成实例将添加斜杠，因为必须有这个斜杠才能正确计算 Output 目录。
   tank.cpp
-D:\C_Project\TankWar\tank.cpp(31,13): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(32,13): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(131,34): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(131,25): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(131,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(131,19): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(134,34): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(134,25): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(134,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(134,19): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(137,34): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(137,25): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(137,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(137,19): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(140,34): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(140,25): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(140,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(140,19): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.h(14,76): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.cpp(58): message : 查看对正在编译的函数 模板 实例化“Rect::Rect<double,double>(T1,T1,T2,T2)”的引用
+D:\C_Project\TankWar\bullet.h(4,22): warning C4091: “extern ”: 没有声明变量时忽略“Direction”的左侧
+D:\C_Project\TankWar\tank.cpp(34,54): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(34,36): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(37,53): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(37,34): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(40,54): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(40,21): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(43,59): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(43,31): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(60,13): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(61,13): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(215,34): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(215,25): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(215,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(215,19): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(218,34): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(218,25): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(218,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(218,19): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(221,34): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(221,25): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(221,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(221,19): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(224,34): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(224,25): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(224,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(224,19): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\Structs.h(55,76): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.cpp(87): message : 查看对正在编译的函数 模板 实例化“Rect::Rect<double,double>(T1,T1,T2,T2)”的引用
           with
           [
               T1=double,
               T2=double
           ]
-D:\C_Project\TankWar\tank.h(14,89): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\Structs.h(55,89): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
   坦克大战.vcxproj -> D:\C_Project\TankWar\x64\Debug\bin\坦克大战.exe

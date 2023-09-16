@@ -30,4 +30,5 @@ public:
 	void ToggleView();//TODO
 	void WindowChange();//改变窗口大小时，更改其它物体坐标
 	void ChangeWorld(Direction dir);//改变世界，移动等操作
+	void ChangeWorld_Fire();//发射子弹等操作
 };

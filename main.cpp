@@ -59,6 +59,7 @@ long long WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 			MW->ChangeWorld(Direction::right);
 			break;
 		case VK_SPACE:
+			MW->ChangeWorld_Fire();
 			/*if (!ON2) {
 				timer[count] = count;
 				count++;
@@ -76,6 +77,9 @@ long long WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 			break;
 		}
 		break;
+	case WM_TIMER:
+		MW->ChangeWorld_Fire();
+		break;
 	case WM_CLOSE:
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -83,7 +87,7 @@ long long WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 		exit(0);
 		break;
 	default:
-		return DefWindowProc(hwnd, msg, wp, lp);
+		return DefWindowProc(hwnd, msg, wp, lp);	
 	}
 }
 

@@ -1,39 +1,12 @@
 #pragma once
 #include"include.h"
 #include"player.h"
+#include "Structs.h"
 
 //设立物体枚举及物体的状态和位置信息
-enum Subject { eagle, wall, sail, food };
+enum Subject { eagle, iron, sail, wall };
 
-struct Point
-{
-	int maprow;
-	int mapcol;
-	Point(int row, int col) :maprow(row), mapcol(col) {};
-	Point() {};
-	bool operator ==(Point &p)
-	{
-		if (this->maprow == p.maprow&&this->mapcol==p.mapcol)
-			return true;
-		return false;
-	}
-};
-struct Object {
-	Rect rect;
-	Point point;
-	int life;
-	bool operator ==(Object& ob)
-	{
-		if (this->point == ob.point)
-			return true;
-		return false;
-	}
-	friend ostream& operator <<(ostream&os, const Object& ob)
-	{
-		os << ob.rect;
-		return os;
-	}
-};
+
 
 const int WindowWidth = 1280;
 const int WindowHeight = 765;
@@ -85,6 +58,8 @@ public:
 	void ChangeWorld(); //游戏内容进行时调用
 	void DrawTank(TANK*tank); //绘制坦克
 	void ClearTank(); //删除坦克
+	void DrawBullet(Bullet* bullet);//绘制子弹
+	void DeleteBullet(Bullet* bullet);//删除子弹
 	void BeginBufferHdc();
 	void EndBufferHdc();//双缓冲实现
 	template<typename T1, typename T2> void Drawob(T1* b, HDC& hdc, HBITMAP h2, T2 xlength, T2 ylength, int x1 = 220, int y1 = 0, int w1 = 110, int h1 = 120);
