@@ -2,6 +2,7 @@
 #include"include.h"
 #include"player.h"
 #include "Structs.h"
+#include "enemy.h"
 
 //设立物体枚举及物体的状态和位置信息
 enum Subject { eagle, iron, sail, wall };

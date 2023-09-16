@@ -20,14 +20,14 @@
 
 class TANK {
 private:
-	//int count4;
+protected:
 	double xlength; //坦克本身的宽度
 	double ylength; //坦克本身的长度
+	HDC hdc; //坦克绘制的hdc
 	HBITMAP hBlt; //坦克的贴图
 	int step = 5;//走过一个地图单元要花费的步数
-	Bullet bullet; //坦克的子弹
-	HDC hdc; //坦克绘制的hdc
 public:
+	Bullet bullet; //坦克的子弹
 	bool button_fire = false;
 	bool change_dir = true;
 	double x; //实际的贴图坐标
@@ -35,8 +35,9 @@ public:
 	double maprow; //地图坐标x
 	double mapcol; //地图坐标y
 	Direction direction; //坦克的方向
-	int life;
+	int life = 5;
 	TANK(int x1, int y1, Direction dir);
+	TANK() {};
 	virtual void Update(double xlength, double ylength); //更新窗口坐标
 	virtual void Update();// 更新内部参数
 	virtual void DRAWONE(); //画出坦克
@@ -49,6 +50,10 @@ public:
 	virtual bool Can_Fire();
 	virtual void Initial_Bullet();
 	virtual void Fire(); //发射子弹
+	virtual void SetBlt(HBITMAP hBit);
+	Rect Get_Rect() { return Rect(x, y, xlength, ylength); };
+	void Insert(TANK *tank); //加入坦克
+	void Delete(TANK* tank); //删除坦克
 	bool Get_Bullet_state() { return bullet.status; };
 	void SetHDC(HDC& hdc) { this->hdc = hdc; };
 };

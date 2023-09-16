@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="collide.cpp" />
+    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manage.cpp" />
     <ClCompile Include="map.cpp" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="bullet.h" />
     <ClInclude Include="collide.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="include.h" />
     <ClInclude Include="manage.h" />
     <ClInclude Include="map.h" />

@@ -8,6 +8,8 @@
 //int width = WindowWidth;
 //int height = WindowHeight;
 AllObjects All_Ob;
+//extern Enemy EM[ENEMY_NUM];
+extern vector<TANK*> EM;
 
 int mapIndex[rows][cols] = { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2,
 						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2,
@@ -90,41 +92,16 @@ void Draw::DrawBackground()
 
 void Draw::InitBackGround()
 {
-	//InvalidateRect(hwnd, NULL, TRUE);
 	//隐藏按钮
 	for (int i = 1; i <= ButtonCount; i++)
 	{
 		ShowWindow(GetDlgItem(hwnd, i), SW_HIDE);
 	}
-	//HDC hdc = GetDC(hwnd);
-	/*PAINTSTRUCT ps;
-	hdc = BeginPaint(hwnd, &ps);*/
-	//hdc2 = CreateCompatibleDC(hdc);
 	// 创建黑色画刷
 	HBRUSH hBlackBrush = CreateSolidBrush(RGB(0, 0, 0));
 	// 设置窗口背景画刷
 	RECT rect = { 0, 0, NowWidth, NowHeight };
 	FillRect(hdc2, &rect, hBlackBrush);
-	//Rectangle(hdcmem, 0, 0, NowWidth, NowHeight);
-	//BitBlt(hdc, 0, 0, NowWidth, NowHeight, hdc2, 0, 0, SRCCOPY);
-	//swap(hdc, hdcmem);
-	//swap(hdc, hdc2);
-	//ReleaseDC(hwnd, hdc);
-	//EndPaint(hwnd, &ps);
-
-	//加载背景的话，使用下述方法
-	/*PAINTSTRUCT ps;
-	hdc = BeginPaint(hwnd, &ps);
-	HBITMAP BackGround = (HBITMAP)LoadImage(NULL, L"image/dark.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-	HDC hdcMem = CreateCompatibleDC(hdc);
-	HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdcMem, BackGround);
-	if (GetImage(BackGround))
-	{
-		StretchBlt(hdc, 0, 0, NowWidth, NowHeight, hdcMem, 0, 0, ImageWidth, ImageHeight, SRCCOPY);
-	}
-	SelectObject(hdcMem, hOldBitmap);
-	DeleteDC(hdcMem);
-	EndPaint(hwnd, &ps);*/
 }
 
 void Draw::ClearTank()
@@ -134,9 +111,6 @@ void Draw::ClearTank()
 
 void Draw::DrawTank(TANK*tank)
 {
-	//hdc = GetDC(hwnd);
-	/*HBITMAP Friend = (HBITMAP)LoadImage(NULL, L"image/mytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-	HBITMAP Enemy = (HBITMAP)LoadImage(NULL, L"image/ememytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);*/
 	double xlength = (double)NowWidth / (rows);
 	double ylength = (double)NowHeight / (cols+1);
 	//TANK player(rows - 1, 4, up);
@@ -195,6 +169,28 @@ void Draw::InitWorld() {
 				//Drawob(&ob, hdc2, map[thing], xlength, ylength);
 		}
 	}
+	for (int i = 0; i < ENEMY_NUM; i++)
+	{
+		Enemy* temp = new Enemy(0, 0, down);
+		HBITMAP hBlt = (HBITMAP)LoadImage(NULL, L"image/enemytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		if (i % 3 == 0)
+		{
+			temp->mapcol = 0;
+		}
+		else if (i % 3 == 1)
+		{
+			temp->mapcol = 6;
+		}
+		else if (i % 3 == 2)
+		{
+			temp->mapcol = 12;
+		}
+		temp->UpdatePosition();
+		temp->SetBlt(hBlt);
+		temp->life = 1;
+		EM.push_back(temp);
+
+	}
 }
 
 void Draw::ChangeWorld() {
@@ -205,7 +201,6 @@ void Draw::ChangeWorld() {
 	{
 		int filenamesize = swprintf(NULL, 0, L"image/myobject%d_66.bmp", i);
 		WCHAR* filename = new WCHAR[filenamesize + 1];
-		//filename = L"image/myobject%d_66.bmp" % (i);
 		wsprintf(filename, L"image/myobject%d_66.bmp", i);//格式化写入map0/1/2/3.bmp
 		map[i] = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);//加载图片的函数
 		delete[]filename;

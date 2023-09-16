@@ -19,6 +19,11 @@ TANK::TANK(int x, int y, Direction dir)
 	hBlt = (HBITMAP)LoadImage(NULL, L"image/mytank_66.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 }
 
+void TANK::SetBlt(HBITMAP hBit)
+{
+	hBlt = hBit;
+}
+
 void TANK::Update(double xlength, double ylength)
 {
 	this->xlength = xlength;
@@ -232,7 +237,6 @@ void TANK::DRAWBULLET()
 {
 	HDC hmemdc = CreateCompatibleDC(hdc);
 	HBRUSH hBlackBrush = CreateSolidBrush(RGB(255, 0, 0));
-	//SelectObject(hmemdc, hBlackBrush);
 	RECT rect = { bullet.point.x, bullet.point.y, bullet.point.x+10, bullet.point.y+10 };
 	FillRect(hdc, &rect, hBlackBrush);
 	DeleteDC(hmemdc);

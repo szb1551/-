@@ -1,9 +1,15 @@
 #include"manage.h"
 #include "collide.h"
+#include "include.h"
 //#include"map.h"
 
 extern AllObjects All_Ob; //外部引用范例
 Player* PA = new Player(rows - 1, 4, up);
+vector<TANK*> EM;
+int Timer_Bullet_Count = 1;
+int Timer_Enemy_Count = 10;
+
+
 ManageWindow::ManageWindow(HWND hwnd, HBITMAP hBitmap, int width, int height)
 {
 	this->hwnd = hwnd;
@@ -45,6 +51,7 @@ void ManageWindow::PaintView()
 		draw->DrawTank(PA);
 		draw->EndBufferHdc();
 		windowstate = game;
+		SetTimer(hwnd, 0, 50, NULL);
 	}
 	else if (windowstate == WindowState::game)
 	{
@@ -52,6 +59,17 @@ void ManageWindow::PaintView()
 		draw->InitBackGround();
 		draw->ChangeWorld();
 		draw->DrawTank(PA);
+		for (int i = 0; i < 3; i++)
+		{
+			if (dynamic_cast<Enemy*>(EM[i]))
+			{
+				Enemy* temp = dynamic_cast<Enemy*>(EM[i]);
+				temp->show = true;
+			}
+			
+			draw->DrawTank(EM[i]);
+			//SetTimer(hwnd, i, 500, NULL);
+		}
 		draw->EndBufferHdc();
 	}
 	delete draw;
@@ -71,6 +89,17 @@ void ManageWindow::ChangeWorld(Direction dir)
 	InvalidateRect(hwnd, NULL, TRUE);
 }
 
+void CALLBACK BulletTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
+	PA->bullet.Update();
+}
+
+void CALLBACK EnemyTankTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
+	for (int i = 0; i < 3; i++)
+	{
+		EM[i]->Update();
+	}
+}
+
 void ManageWindow::ChangeWorld_Fire()
 {
 	if (PA->Get_Bullet_state() == 0)
@@ -78,12 +107,12 @@ void ManageWindow::ChangeWorld_Fire()
 		if (PA->button_fire == false)
 		{
 			PA->button_fire = true;
-			SetTimer(hwnd, 1, 50, NULL);
+			SetTimer(hwnd, Timer_Bullet_Count, 1000, EnemyTankTimerProc);
 		}
 		else
 		{
 			PA->button_fire = false;
-			KillTimer(hwnd, 1);
+			//KillTimer(hwnd, Timer_Bullet_Count);
 		}	
 	}
 	InvalidateRect(hwnd, NULL, TRUE);
