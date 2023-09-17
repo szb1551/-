@@ -1,12 +1,46 @@
 ﻿D:\Visual_Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output 目录未以斜杠结尾。  此生成实例将添加斜杠，因为必须有这个斜杠才能正确计算 Output 目录。
-  manage.cpp
+  map.cpp
 D:\C_Project\TankWar\bullet.h(4,22): warning C4091: “extern ”: 没有声明变量时忽略“Direction”的左侧
-D:\C_Project\TankWar\Structs.h(55,76): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-D:\C_Project\TankWar\tank.h(54): message : 查看对正在编译的函数 模板 实例化“Rect::Rect<double,double>(T1,T1,T2,T2)”的引用
+D:\C_Project\TankWar\tank.h(61,54): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.h(61,51): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.h(62,42): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.h(62,34): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(78,15): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(169,42): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(169,29): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(169,24): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(169,21): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(203,12): warning C4101: “y”: 未引用的局部变量
+D:\C_Project\TankWar\map.cpp(203,9): warning C4101: “x”: 未引用的局部变量
+D:\C_Project\TankWar\map.cpp(334,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
+D:\C_Project\TankWar\map.cpp(334,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(335,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
+D:\C_Project\TankWar\map.cpp(335,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(336,18): warning C4312: “类型强制转换”: 从“const int”转换到更大的“HMENU”
+D:\C_Project\TankWar\map.cpp(336,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\Structs.h(56,76): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\tank.h(60): message : 查看对正在编译的函数 模板 实例化“Rect::Rect<double,double>(T1,T1,T2,T2)”的引用
           with
           [
               T1=double,
               T2=double
           ]
-D:\C_Project\TankWar\Structs.h(55,89): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\Structs.h(56,89): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\C_Project\TankWar\map.cpp(217,50): warning C4244: “参数”: 从“T2”转换到“int”，可能丢失数据
+          with
+          [
+              T2=double
+          ]
+D:\C_Project\TankWar\map.cpp(210): message : 查看对正在编译的函数 模板 实例化“void Draw::Drawob<_Ty,double>(T1 *,HDC &,HBITMAP,T2,T2,int,int,int,int)”的引用
+          with
+          [
+              _Ty=Object,
+              T1=Object,
+              T2=double
+          ]
+D:\C_Project\TankWar\map.cpp(217,41): warning C4244: “参数”: 从“T2”转换到“int”，可能丢失数据
+          with
+          [
+              T2=double
+          ]
   坦克大战.vcxproj -> D:\C_Project\TankWar\x64\Debug\bin\坦克大战.exe

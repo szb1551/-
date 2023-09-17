@@ -34,14 +34,19 @@ void AllObjects::show()
 	}
 }
 
+void AllObjects::clear()
+{
+	Objects.clear();
+	object_num = 0;
+}
+
 bool CollideObject::Collide(Rect& rect1, Rect& rect2)
 {
 	
 	if (!(rect1.x >= rect2.x + rect2.width || rect1.y >= rect2.y + rect2.height || rect1.x + rect1.width <= rect2.x || rect1.y + rect1.height <= rect2.y))
 	{
-		cout << 1 << endl;
-		cout << "RECT1" << ' ' << rect1.x << ' ' << rect1.y << endl;
-		cout << "RECT2" << ' ' << rect2.x << ' ' << rect2.y << endl;
+		/*cout << "RECT1" << ' ' << rect1.x << ' ' << rect1.y << endl;
+		cout << "RECT2" << ' ' << rect2.x << ' ' << rect2.y << endl;*/
 		return true;
 	}
 	return false;

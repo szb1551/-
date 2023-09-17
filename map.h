@@ -4,8 +4,7 @@
 #include "Structs.h"
 #include "enemy.h"
 
-//设立物体枚举及物体的状态和位置信息
-enum Subject { eagle, iron, sail, wall };
+//设立物体枚举及物体的状态和位置信
 
 
 
@@ -65,7 +64,10 @@ public:
 	void EndBufferHdc();//双缓冲实现
 	template<typename T1, typename T2> void Drawob(T1* b, HDC& hdc, HBITMAP h2, T2 xlength, T2 ylength, int x1 = 220, int y1 = 0, int w1 = 110, int h1 = 120);
 	bool GetImage();
-	bool GetImage(HBITMAP hBlt);
+	//bool GetImage(HBITMAP& h);
+	bool GetImage(HBITMAP& hBlt);
+	void DrawLoseGround(); //加载失败场景
+	void DrawWinGround(); //加载胜利场景
 	~Draw();
 };
 

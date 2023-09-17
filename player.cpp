@@ -54,7 +54,7 @@ void Player::CanRun(bool& can_run)
 			}
 		}
 	}
-	for (int i = 0; i < EM.size(); i++)
+	for (int i = 0; i < EM.size()&&can_run; i++)
 	{
 		Enemy* temp = dynamic_cast<Enemy*>(EM[i]);
 		if (temp->show == true)

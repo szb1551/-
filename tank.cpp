@@ -54,8 +54,13 @@ void TANK::Initial_Bullet()
 
 bool TANK::Can_Fire()
 {
-	if (bullet.status == 0 && button_fire==true)
+	if (bullet.GetTarget())
+		HitTarget();
+	if (bullet.status == 0 && button_fire == true)
+	{
+		button_fire = false;
 		return true;
+	}
 	return false;
 }
 
@@ -83,10 +88,7 @@ void TANK::CanRun(bool& can_run, int xflag1, int xflag2, int yflag1, int yflag2)
 		break;
 	case Direction::right:
 		temp_y = y;
-		cout << (1. / step * (int)xlength) << endl;
-		cout << x << endl;
 		temp_x = x + int(1./step * (int)xlength);
-		cout << temp_x <<round(temp_x)<<endl;
 		break;
 	}
 	Rect rect1(temp_x, temp_y, xlength, ylength);
@@ -125,10 +127,7 @@ void TANK::CanRun(bool& can_run)
 		break;
 	case Direction::right:
 		temp_y = y;
-		cout << (1. / step * (int)xlength) << endl;
-		cout << x << endl;
 		temp_x = x + int(1. / step * (int)xlength);
-		cout << temp_x << round(temp_x) << endl;
 		break;
 	}
 	Rect rect1(temp_x, temp_y, xlength, ylength);
@@ -190,7 +189,7 @@ void TANK::Update()
 	}
 	this->x = mapcol * xlength;
 	this->y = maprow * ylength;
-	show();
+	//show();
 }
 
 void TANK::show()
@@ -251,9 +250,8 @@ void TANK::Fire()
 	}
 	else if (bullet.status == 1)
 	{
-		cout << "进入子弹移动" << endl;
 		bullet.Update();
-		cout << bullet.point << endl;
+		//cout << bullet.point << endl;
 		DRAWBULLET();
 	}
 }

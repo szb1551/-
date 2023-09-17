@@ -2,6 +2,7 @@
 #include "include.h"
 
 enum Direction { up, down, right, left };
+enum Subject { eagle, iron, sail, wall };
 
 struct Point
 {
@@ -64,6 +65,7 @@ struct Rect
 struct Object {
 	Rect rect;
 	Point point;
+	Subject subject;
 	int life;
 	bool operator ==(Object& ob)
 	{
@@ -86,4 +88,5 @@ struct AllObjects
 	void Delete(Object ob);
 	void Delete(int i);
 	void show();
+	void clear();
 };

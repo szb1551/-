@@ -20,6 +20,8 @@
 
 class TANK {
 private:
+	int owner = 0;
+	bool TARGET = false; //是否击中目标
 protected:
 	double xlength; //坦克本身的宽度
 	double ylength; //坦克本身的长度
@@ -50,8 +52,14 @@ public:
 	virtual bool Can_Fire();
 	virtual void Initial_Bullet();
 	virtual void Fire(); //发射子弹
-	virtual void SetBlt(HBITMAP hBit);
-	Rect Get_Rect() { return Rect(x, y, xlength, ylength); };
+	virtual void SetBlt(HBITMAP hBit); //设置贴图
+	void HitTarget() { TARGET = true; };
+	bool GetTarget() { return TARGET; };
+	void SetOwner(int owner) { this->owner = owner;  bullet.SetOwner(owner); };//设置队伍
+	int GetOwner() { return owner; };//得到坦克的队伍
+ 	Rect Get_Rect() { return Rect(x, y, xlength, ylength); };
+	Point_Image GetImagePoint() { return Point_Image(x, y); };
+	Point GetPoint() { return Point(maprow, mapcol); };
 	void Insert(TANK *tank); //加入坦克
 	void Delete(TANK* tank); //删除坦克
 	bool Get_Bullet_state() { return bullet.status; };

@@ -23,31 +23,22 @@ long long WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	case WM_SIZE:
 		cout << "调用WM_SIZE";
 		//当窗口大小发生改变时，更新图片的大小和位置
-		//MW.WindowChange();
 		if(MW!=nullptr)
 			MW->WindowChange();
 		//WindowChange(hwnd, width, height);
 		break;
 	case WM_PAINT:
-		cout << "调用WM_PAINT";
-		//MW.PaintView();
+		//cout << "调用WM_PAINT" << endl;	
 		if (MW != nullptr)
 			MW->PaintView();
-		//PaintView(hBitmap, hwnd, width, height);
+		//PaintView(hBitmap, hwnd, width, height); 
 		break;
 	case WM_KEYDOWN:
+		cout << wp << endl;
 		switch (wp)
 		{
 		case VK_UP:
-			//MessageBox(NULL, L"点击了", L"上建", NULL);
 			MW->ChangeWorld(up);
-			/*if (!ON2) {
-				change(&g_tank, 0, 0 - g_tank.yverb, 0);
-				hdc1 = GetDC(hWnd);
-				DRAWONE(&g_tank, hdc1, 0);
-				ReleaseDC(hWnd, hdc1);
-			}*/
-			//if(g_tank.maprow==rows-1)MessageBox(hh,L"pa",L"sd",NULL);
 			break;
 		case VK_DOWN:
 			MW->ChangeWorld(down);
@@ -59,26 +50,13 @@ long long WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 			MW->ChangeWorld(Direction::right);
 			break;
 		case VK_SPACE:
+			//MessageBox(hwnd, L"S", L"d", NULL);
 			MW->ChangeWorld_Fire();
-			/*if (!ON2) {
-				timer[count] = count;
-				count++;
-				bx[count - 1] = g_tank.x;
-				by[count - 1] = g_tank.y;
-				init2(&bb[count - 1], g_tank.hurt2, g_tank.x, g_tank.y, g_tank.direction, count - 1);
-				bb[count - 1].source = &g_tank;
-				bb[count - 1].group = mtank;
-				c101[count - 1] = g_tank.direction;
-				SetTimer(hWnd, timer[count - 1], 50, NULL);
-				hdc1 = GetDC(hWnd);
-				DRAWONE(&g_tank, hdc1, 0);
-				ReleaseDC(hWnd, hdc1);
-			}*/
 			break;
 		}
 		break;
 	case WM_TIMER:
-		MW->ChangeWorld_Fire();
+		//MW->ChangeWorld_Fire();
 		break;
 	case WM_CLOSE:
 	case WM_DESTROY:

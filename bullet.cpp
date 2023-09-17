@@ -3,6 +3,8 @@
 
 extern AllObjects All_Ob;
 extern int mapIndex[rows][cols];
+extern vector<TANK*> EM;
+extern Player* PA;
 
 void Bullet::Move()
 {
@@ -47,9 +49,51 @@ void Bullet::Update()
 			if (Collide(All_Ob.Objects[j].rect))
 			{
 				status = 0;
-				All_Ob.Objects[j].life--;
-				if(All_Ob.Objects[j].life<=0)
+				if (mapIndex[temp_row][temp_col] == iron)
+					continue;
+				else
+					All_Ob.Objects[j].life--;
+				if (All_Ob.Objects[j].life <= 0)
 					All_Ob.Delete(j);
+				if (mapIndex[temp_row][temp_col] == eagle)
+				{
+					HitTarget();
+					cout << "ÈçºÎÆÀ¼Û" << endl;
+				}
+			}
+		}
+	}
+	if(owner == 0)
+		for (int i = 0; i < EM.size()&&status; i++)
+		{
+			Enemy* temp = dynamic_cast<Enemy*>(EM[i]);
+			if (temp->show == true)
+			{
+				Rect rect = temp->Get_Rect();
+				if (Collide(rect))
+				{
+					status = 0;
+					temp->life--;
+					if (temp->life <= 0)
+					{
+						delete temp;
+						EM[i] = nullptr;
+						EM.erase(EM.begin() + i);
+					}
+					break;
+				}
+			}
+		}
+	else if(PA)
+	{
+		Rect rect = PA->Get_Rect();
+		if (Collide(rect))
+		{
+			PA->life--;
+			if (PA->life <= 0)
+			{
+				delete PA;
+				PA = nullptr;
 			}
 		}
 	}

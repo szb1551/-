@@ -1,10 +1,17 @@
 #pragma once
 #include "map.h"
 
-enum WindowState { background, begin, game, set, end };
+enum WindowState { background, begin, game, set, end, win, lose };
 
 #define IDC_WINDOWSPROJECT1 109
 #define ENEMY_NUM 10
+#define ENEMY_EXIST_NUM 3
+
+void CALLBACK WorldTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
+void CALLBACK EnemyTankTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
+void CALLBACK EnemyTankDirectionProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
+
+void KillAllTimer(HWND hwnd);
 
 //设立一个Manage类来管理窗口
 class ManageWindow
@@ -21,6 +28,7 @@ private:
 	BOOL CALLBACK EnumChildProc(HWND hwndChild, LPARAM lParam); //检查是否有子窗口，按钮数量增加
 	Draw* draw=nullptr; //定义Draw类变量
 	WindowState windowstate=background;
+	PAINTSTRUCT ps;
 public:
 	ManageWindow(HWND hwnd, HBITMAP hBitmap, int width, int height);
 	ManageWindow(HWND hwnd, HBITMAP hBitmap);

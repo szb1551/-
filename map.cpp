@@ -10,6 +10,7 @@
 AllObjects All_Ob;
 //extern Enemy EM[ENEMY_NUM];
 extern vector<TANK*> EM;
+HBITMAP map[4]; //存放地图资源
 
 int mapIndex[rows][cols] = { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2,
 						   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2,
@@ -88,6 +89,7 @@ void Draw::DrawBackground()
 	//清理资源
 	SelectObject(hdc2, hOldBitmap);
 	DeleteDC(hdc2);
+	DeleteObject(hOldBitmap);
 }
 
 void Draw::InitBackGround()
@@ -102,6 +104,7 @@ void Draw::InitBackGround()
 	// 设置窗口背景画刷
 	RECT rect = { 0, 0, NowWidth, NowHeight };
 	FillRect(hdc2, &rect, hBlackBrush);
+	DeleteObject(hBlackBrush);
 }
 
 void Draw::ClearTank()
@@ -113,12 +116,10 @@ void Draw::DrawTank(TANK*tank)
 {
 	double xlength = (double)NowWidth / (rows);
 	double ylength = (double)NowHeight / (cols+1);
-	//TANK player(rows - 1, 4, up);
 	tank->SetHDC(hdc2);
 	tank->Update(xlength, ylength);
 	tank->DRAWONE();
 	tank->Fire();
-	//ReleaseDC(hwnd, hdc);
 }
 
 void Draw::DrawBullet(Bullet* bullet)
@@ -128,8 +129,7 @@ void Draw::DrawBullet(Bullet* bullet)
 
 void Draw::InitWorld() {
 	//GetClientRect(hh, &worldre);
-	HBITMAP map[4];
-	PAINTSTRUCT ps;
+	All_Ob.clear();
 	for (int i = 0; i < 4; i++)
 	{
 		int filenamesize = swprintf(NULL, 0, L"image/myobject%d_66.bmp", i);
@@ -145,11 +145,10 @@ void Draw::InitWorld() {
 	Object ob;
 	cout << "进入创建世界了" << endl;
 	for (int rowNum = 0; rowNum < rows; rowNum++) {
-		//MessageBox(hwnd,L"S",L"S",NULL);
 		for (int colNum = 0; colNum < cols; colNum++) {
 			x = (colNum) * xlength;//贴图所在横坐标			
 			y = (rowNum) * ylength;//贴图所在纵坐标	
-			int thing = mapIndex[rowNum][colNum];
+			Subject thing = (Subject)mapIndex[rowNum][colNum];
 			if (thing == iron) {
 				ob.life = 4;
  			}
@@ -161,12 +160,15 @@ void Draw::InitWorld() {
 			}
 			Point point(rowNum, colNum);
 			Rect rect(x,y,xlength,ylength);
+			ob.subject = thing;
 			ob.rect = rect;
 			ob.point = point;
-			All_Ob.Insert(ob);
-			if(thing!=sail)
+			if (thing != sail)
+			{
+				All_Ob.Insert(ob);
 				Rectangle(hdc2, x, y, x + xlength, y + ylength);
 				//Drawob(&ob, hdc2, map[thing], xlength, ylength);
+			}	
 		}
 	}
 	for (int i = 0; i < ENEMY_NUM; i++)
@@ -188,28 +190,18 @@ void Draw::InitWorld() {
 		temp->UpdatePosition();
 		temp->SetBlt(hBlt);
 		temp->life = 1;
+		temp->SetOwner(1);
+		temp->SetID(i);
 		EM.push_back(temp);
-
 	}
 }
 
 void Draw::ChangeWorld() {
 	//GetClientRect(hh, &worldre);
-	HBITMAP map[4];
-	PAINTSTRUCT ps;
-	for (int i = 0; i < 4; i++)
-	{
-		int filenamesize = swprintf(NULL, 0, L"image/myobject%d_66.bmp", i);
-		WCHAR* filename = new WCHAR[filenamesize + 1];
-		wsprintf(filename, L"image/myobject%d_66.bmp", i);//格式化写入map0/1/2/3.bmp
-		map[i] = (HBITMAP)LoadImage(NULL, filename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);//加载图片的函数
-		delete[]filename;
-	}
 	double xlength = (double)NowWidth / (rows);
 	double ylength = (double)NowHeight / (cols+1);
 	double x, y;
 	Object ob;
-	cout << "进入游戏世界了" << endl;
 	for (int i = 0; i < All_Ob.object_num; i++)
 	{
 		Point point = All_Ob.Objects[i].point;
@@ -223,7 +215,8 @@ template<typename T1, typename T2> void Draw::Drawob(T1* b, HDC& hdc, HBITMAP h2
 	HDC hmemdc = CreateCompatibleDC(hdc2);
 	SelectObject(hmemdc, h2);
 	StretchBlt(hdc2, b->rect.x, b->rect.y, xlength, ylength, hmemdc, x1, y1, w1, h1, SRCCOPY);
-	DeleteObject(hmemdc);
+	//DeleteObject(hmemdc);
+	DeleteDC(hmemdc);
 }
 
 void Draw::BeginBufferHdc()
@@ -237,6 +230,7 @@ void Draw::BeginBufferHdc()
 void Draw::EndBufferHdc()
 {
 	BitBlt(hdc, 0, 0, NowWidth, NowHeight, hdc2, 0, 0, SRCCOPY);
+	DeleteObject(hBitmap);
 	DeleteDC(hdc2);
 	ReleaseDC(hwnd, hdc);
 }
@@ -253,7 +247,7 @@ bool Draw::GetImage()
 	return true;
 }
 
-bool Draw::GetImage(HBITMAP hBitmap)
+bool Draw::GetImage(HBITMAP& hBitmap)
 {
 	BITMAP bmp;
 	GetObject(hBitmap, sizeof(BITMAP), &bmp);
@@ -263,6 +257,59 @@ bool Draw::GetImage(HBITMAP hBitmap)
 	if (ImageWidth == 0 || ImageHeight == 0)
 		return false;
 	return true;
+}
+
+void Draw::DrawLoseGround()
+{
+	CImage img;
+	WCHAR filename[] = L"image/lose.jpg";
+	HRESULT ret = img.Load(filename); // filename 是要加载的文件名（包含路径）
+	HBITMAP bitmap = img.Detach();
+	//创建内存设备上下文
+	hdc2 = CreateCompatibleDC(hdc);
+	SelectObject(hdc2, bitmap);
+
+	// 绘制按钮
+	/*cout << "绘制按钮" << endl;
+	for (int i = 1; i <= ButtonCount; i++)
+	{
+		int buttonx = NowWidth / 2 - 50;
+		int buttony = NowHeight * 0.8 - 15 + (30 * (i - 1));
+		SetWindowPos(GetDlgItem(hwnd, i), NULL, buttonx, buttony, 100, 30, SWP_SHOWWINDOW);
+	}*/
+
+	//读取图像
+	if (GetImage(bitmap))
+	{
+		cout << "读取图像成功" << endl;
+		StretchBlt(hdc, 0, 0, NowWidth, NowHeight, hdc2, 0, 0, ImageWidth, ImageHeight, SRCCOPY);
+	}
+	//绘制图像
+	//清理资源
+	DeleteDC(hdc2);
+	DeleteObject(bitmap);
+}
+
+void Draw::DrawWinGround()
+{
+	CImage img;
+	WCHAR filename[] = L"image/win.jpg";
+	HRESULT ret = img.Load(filename); // filename 是要加载的文件名（包含路径）
+	HBITMAP bitmap = img.Detach();
+	//创建内存设备上下文
+	hdc2 = CreateCompatibleDC(hdc);
+	SelectObject(hdc2, bitmap);
+
+	//读取图像
+	if (GetImage(bitmap))
+	{
+		cout << "读取图像成功" << endl;
+		StretchBlt(hdc, 0, 0, NowWidth, NowHeight, hdc2, 0, 0, ImageWidth, ImageHeight, SRCCOPY);
+	}
+	//绘制图像
+	//清理资源
+	DeleteDC(hdc2);
+	DeleteObject(bitmap);
 }
 
 Draw::~Draw()

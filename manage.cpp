@@ -16,6 +16,9 @@ ManageWindow::ManageWindow(HWND hwnd, HBITMAP hBitmap, int width, int height)
 	this->hBitmap = hBitmap;
 	this->NowWindowWidth = width;
 	this->NowWindowHeight = height;
+	//PAINTSTRUCT ps;
+	HDC hdc = BeginPaint(hwnd, &ps);
+	draw = new Draw(hBitmap, hwnd, hdc, NowWindowWidth, NowWindowHeight);
 }
 
 ManageWindow::ManageWindow(HWND hwnd, HBITMAP hBitmap)
@@ -36,9 +39,7 @@ BOOL CALLBACK ManageWindow::EnumChildProc(HWND hwndChild, LPARAM lParam)
 
 void ManageWindow::PaintView()
 {
-	PAINTSTRUCT ps;
 	HDC hdc = BeginPaint(hwnd, &ps);
-	cout << NowWindowWidth << " " << NowWindowHeight << endl;
 	draw = new Draw(hBitmap, hwnd, hdc, NowWindowWidth, NowWindowHeight);
 	if (windowstate == background)
 		draw->DrawBackground();
@@ -48,29 +49,61 @@ void ManageWindow::PaintView()
 		draw->InitBackGround();
 		draw->InitWorld();
 		All_Ob.show();
-		draw->DrawTank(PA);
 		draw->EndBufferHdc();
 		windowstate = game;
-		SetTimer(hwnd, 0, 50, NULL);
+		SetTimer(hwnd, 0, 20, WorldTimerProc);
+		SetTimer(hwnd, Timer_Bullet_Count, 400, EnemyTankTimerProc);
+		SetTimer(hwnd, Timer_Enemy_Count, 1000, EnemyTankDirectionProc);
 	}
 	else if (windowstate == WindowState::game)
 	{
 		draw->BeginBufferHdc();
 		draw->InitBackGround();
 		draw->ChangeWorld();
-		draw->DrawTank(PA);
-		for (int i = 0; i < 3; i++)
+		if (PA)
+		{
+			draw->DrawTank(PA);
+			if (PA->GetTarget())
+			{
+				cout << "自杀" << endl;
+				windowstate = lose;
+			}
+		}
+		for (int i = 0; i < min(ENEMY_EXIST_NUM,EM.size()); i++)
 		{
 			if (dynamic_cast<Enemy*>(EM[i]))
 			{
 				Enemy* temp = dynamic_cast<Enemy*>(EM[i]);
 				temp->show = true;
 			}
-			
 			draw->DrawTank(EM[i]);
-			//SetTimer(hwnd, i, 500, NULL);
+			if (EM[i]->GetTarget())
+			{
+				cout << " 它杀" << endl;
+				windowstate = lose;
+			}
 		}
 		draw->EndBufferHdc();
+		if (PA == nullptr)
+		{
+			windowstate = lose;	
+		}
+		else if (EM.size() == 0)
+		{
+			windowstate = win;
+		}
+	}
+	else if (windowstate == win)
+	{
+		cout << "赢了" << endl;
+		KillAllTimer(hwnd);
+		draw->DrawWinGround();
+	}
+	else if (windowstate == lose)
+	{
+		cout << "输了" << endl;
+		KillAllTimer(hwnd);
+		draw->DrawLoseGround();
 	}
 	delete draw;
 	EndPaint(hwnd, &ps);
@@ -78,14 +111,28 @@ void ManageWindow::PaintView()
 
 void ManageWindow::ChangeWorld(Direction dir)
 {
-	if (dir != PA->direction)
+	if (PA)
 	{
-		PA->direction = dir;
-		PA->change_dir = true;
+		if (dir != PA->direction)
+		{
+			PA->direction = dir;
+			PA->change_dir = true;
+		}
+		else
+			PA->change_dir = false;
+		PA->Update();
 	}
-	else
-		PA->change_dir = false;
-	PA->Update();
+}
+
+
+void KillAllTimer(HWND hwnd)
+{
+	KillTimer(hwnd, 0);
+	KillTimer(hwnd, Timer_Bullet_Count);
+	KillTimer(hwnd, Timer_Enemy_Count);
+}
+
+void CALLBACK WorldTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
 	InvalidateRect(hwnd, NULL, TRUE);
 }
 
@@ -93,8 +140,20 @@ void CALLBACK BulletTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTi
 	PA->bullet.Update();
 }
 
+void CALLBACK EnemyTankDirectionProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
+	for (int i = 0; i < min(ENEMY_EXIST_NUM,EM.size()); i++)
+	{
+		Enemy* temp = dynamic_cast<Enemy*>(EM[i]);
+		if (i % 2 == 0&&PA)
+			temp->direction = temp->EnemyDirection(PA->GetImagePoint());
+		else
+			temp->direction = temp->EnemyDirection(Point(15, 6));
+		
+	}
+}
+
 void CALLBACK EnemyTankTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < min(ENEMY_EXIST_NUM, EM.size()); i++)
 	{
 		EM[i]->Update();
 	}
@@ -102,20 +161,19 @@ void CALLBACK EnemyTankTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD d
 
 void ManageWindow::ChangeWorld_Fire()
 {
-	if (PA->Get_Bullet_state() == 0)
+	if (PA&&PA->Get_Bullet_state() == 0)
 	{
 		if (PA->button_fire == false)
 		{
 			PA->button_fire = true;
-			SetTimer(hwnd, Timer_Bullet_Count, 1000, EnemyTankTimerProc);
 		}
 		else
 		{
 			PA->button_fire = false;
-			//KillTimer(hwnd, Timer_Bullet_Count);
+			
 		}	
 	}
-	InvalidateRect(hwnd, NULL, TRUE);
+	//InvalidateRect(hwnd, NULL, TRUE);
 }
 
 void ManageWindow::Update()
