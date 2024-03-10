@@ -1,12 +1,14 @@
-#include "enemy.h"
-#include "player.h"
-#include "collide.h"
+#include "bin/enemy.h"
+#include "bin/player.h"
+#include "bin/collide.h"
+#include "bin/PathFind.h"
 
 extern AllObjects All_Ob;
 extern int mapIndex[rows][cols];
 extern CollideObject Collides;
 extern vector<TANK*> EM;
 extern Player* PA;
+
 
 Direction Enemy::EnemyDirection(Point_Image target)
 {
@@ -39,6 +41,7 @@ Direction Enemy::EnemyDirection(Point_Image target)
 	}
 }
 
+
 Direction Enemy::EnemyDirection(Point target)
 {
 	int r = rand() % 100;
@@ -68,6 +71,137 @@ Direction Enemy::EnemyDirection(Point target)
 			return Direction::down;
 		}
 	}
+}
+
+Direction Enemy::EnemyDirection2(Point target)
+{
+	vector<node*> openlist;
+	vector<node*> closelist;
+	int ta = ConvertDoubleToInt(maprow);
+	int tb = ConvertDoubleToInt(mapcol);
+	pair<int, int> start = { ta, tb };
+	pair<int, int> tar = { target.maprow, target.mapcol };
+	openlist.push_back(new node(start, tar));
+	clock_t startTime, endTime; //计算下找终点过程所花的时间
+	startTime = clock();
+	while (openlist.size() != 0 && nodeln(new node(tar, tar), closelist) == nullptr) {
+		//当openlist不为空，且还没有在closelist中找到终点节点的时候一直循环
+		node* temp = findMinF(openlist); //找到当前openlist中的最小值
+		//temp->show();// 打印当前的节点信息
+		//在openlist中删除当前节点
+		int tsize = openlist.size();
+		for (int i = 0; i < tsize; i++) {
+			node* t = openlist[i];
+			if (t->x == temp->x && t->y == temp->y) {
+				openlist.erase(openlist.begin() + i);
+				break;
+			}
+		}
+		// 如果当前节点不在closelist中就加入进去
+		if (!nodeln(temp, closelist)) {
+			closelist.push_back(temp);
+		}
+		listAppend(temp, tar, openlist, closelist, (int*)mapIndex); // 处理周围的节点，根据移动的受限性，判断是多少个节点
+	}
+	endTime = clock();
+	//cout << "--------------------------------------" << endl;
+	//cout << "当前坦克ID为:" << ID << endl;
+	//cout << maprow <<" "<< mapcol << endl;
+	//cout << "The run time is:" << (double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << endl;
+	auto res = nodeln(new node(tar, tar), closelist);
+	//进行路径扩充 若目标被障碍物包围，我们需要是到它的附近，而不是停滞不前
+	if (!res)
+	{
+		queue<pair<int, int>> q;
+		q.push(tar);
+		vector<pair<int, int>> temp = { {-1,0},{-1,-1}, {-1,1}, {1,-1}, {1,0},{1,1}, {0,-1},{0,1} };
+		vector<vector<bool>> visited(rows, vector<bool>(cols));
+		visited[tar.first][tar.second] = true;
+		for (int i = 0; i < 2; i++) //路径扩充包括两层范围
+		{
+			int sz = q.size();
+			while (sz-->0)
+			{
+				auto p = q.front();
+				q.pop();
+				for (auto info : temp)
+				{
+					int dx = info.first + p.first;
+					int dy = p.second + info.second;
+					if (dx < 0 || dx >= rows || dy < 0 || dy >= cols || visited[dx][dy]) continue;
+					visited[dx][dy] = true;
+					tar = { dx, dy };
+					res = nodeln(new node(tar, tar), closelist);
+					if (res) break;
+					q.push(tar);
+				}
+			}
+		}
+	}
+	if (!res) cout << "无可行路径" << endl;
+	//else getres(res); //得到A*算法得到的路径信息
+	stack<node*> s;
+	while (res) {
+		s.push(res);
+		res = res->father;
+	}
+	node* t1 = s.top(); //目标节点位置不是在第一个就是在第二个
+	s.pop();
+	int row_temp = CanConvertDoubleToInt(maprow);
+	int col_temp = CanConvertDoubleToInt(mapcol);
+	if (s.empty())
+	{
+		if (t1->x > ta)
+			return Direction::down;
+		else if (t1->x < ta)
+			return Direction::up;
+		if (t1->y > tb)
+			return Direction::right;
+		else if (t1->y < tb)
+			return Direction::left;
+		return EnemyDirection(target);
+	}
+	node* t2 = s.top();
+	//cout << t2->x << ' ' << t2->y << endl; //查看目标坐标
+	//cout << ta << ' ' << tb << endl; //查看我们的起始坐标(double 转int)
+	//cout << row_temp << ' ' << col_temp << endl; //查看我们是否能够转int ，1.4是有意义的，但1.000001是没有意义的
+	if (row_temp >= 0 && col_temp>=0) {
+		if (t2->x > row_temp)
+			return Direction::down;
+		if (t2->x < row_temp)
+			return Direction::up;
+		if (t2->y > col_temp)
+			return Direction::right;
+		if (t2->y < col_temp)
+			return Direction::left;
+		return EnemyDirection(target);
+	}
+	else if (row_temp >= 0)
+	{
+		if (t2->y > mapcol)
+			return Direction::right;
+		else if (t2->y < mapcol)
+			return Direction::left;
+	}
+	else if (col_temp >= 0)
+	{
+		if (t2->x > maprow)
+			return Direction::down;
+		else if (t2->x < maprow)
+		{
+			return Direction::up;
+		}
+	}
+	if (t2->x > maprow)
+		return Direction::down;
+	if (t2->x < maprow)
+		return Direction::up;
+	if (t2->y > mapcol)
+		return Direction::right;
+	else if (t2->y < mapcol)
+		return Direction::left;
+	return EnemyDirection(target);
+	
 }
 
 void Enemy::Update()

@@ -76,6 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\bin</OutDir>
+    <ReferencePath>bin;$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -138,22 +139,28 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="collide.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="help.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manage.cpp" />
     <ClCompile Include="map.cpp" />
+    <ClCompile Include="node.cpp" />
+    <ClCompile Include="PathFind.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="tank.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bullet.h" />
-    <ClInclude Include="collide.h" />
-    <ClInclude Include="enemy.h" />
-    <ClInclude Include="include.h" />
-    <ClInclude Include="manage.h" />
-    <ClInclude Include="map.h" />
-    <ClInclude Include="player.h" />
-    <ClInclude Include="Structs.h" />
-    <ClInclude Include="tank.h" />
+    <ClInclude Include="bin\bullet.h" />
+    <ClInclude Include="bin\collide.h" />
+    <ClInclude Include="bin\enemy.h" />
+    <ClInclude Include="bin\include.h" />
+    <ClInclude Include="bin\manage.h" />
+    <ClInclude Include="bin\map.h" />
+    <ClInclude Include="bin\player.h" />
+    <ClInclude Include="bin\Structs.h" />
+    <ClInclude Include="bin\tank.h" />
+    <ClInclude Include="help.h" />
+    <ClInclude Include="node.h" />
+    <ClInclude Include="PathFind.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

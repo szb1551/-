@@ -1,6 +1,6 @@
-#include "tank.h"
-#include "map.h"
-#include "collide.h"
+#include "bin/tank.h"
+#include "bin/map.h"
+#include "bin/collide.h"
 
 extern AllObjects All_Ob; //外部引用范例
 extern int mapIndex[rows][cols];

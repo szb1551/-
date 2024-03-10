@@ -1,5 +1,5 @@
-#include "bullet.h"
-#include "map.h"
+#include "bin/bullet.h"
+#include "bin/map.h"
 
 extern AllObjects All_Ob;
 extern int mapIndex[rows][cols];

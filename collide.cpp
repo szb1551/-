@@ -1,4 +1,4 @@
-#include "collide.h"
+#include "bin/collide.h"
 
 
 void AllObjects::Insert(Object ob)

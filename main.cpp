@@ -1,6 +1,6 @@
-#include "player.h"
-#include "bullet.h"
-#include "manage.h"
+#include "bin/player.h"
+#include "bin/bullet.h"
+#include "bin/manage.h"
 
 HBITMAP hBitmap;
 ManageWindow* MW;

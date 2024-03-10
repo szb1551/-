@@ -1,7 +1,7 @@
-#include "manage.h"
-#include "tank.h"
-#include "collide.h"
-#include "include.h"
+#include "bin/manage.h"
+#include "bin/tank.h"
+#include "bin/collide.h"
+#include "bin/include.h"
 //#include "map.h"
 
 //HBITMAP hBitmap;

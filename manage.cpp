@@ -1,6 +1,6 @@
-#include"manage.h"
-#include "collide.h"
-#include "include.h"
+#include"bin/manage.h"
+#include "bin/collide.h"
+#include "bin/include.h"
 //#include"map.h"
 
 extern AllObjects All_Ob; //外部引用范例
@@ -144,10 +144,12 @@ void CALLBACK EnemyTankDirectionProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWO
 	for (int i = 0; i < min(ENEMY_EXIST_NUM,EM.size()); i++)
 	{
 		Enemy* temp = dynamic_cast<Enemy*>(EM[i]);
+		//temp->direction = temp->EnemyDirection2(Point(15, 6));
 		if (i % 2 == 0&&PA)
-			temp->direction = temp->EnemyDirection(PA->GetImagePoint());
+			//temp->direction = temp->EnemyDirection(PA->GetImagePoint()); //模糊寻找
+			temp->direction = temp->EnemyDirection2(PA->GetPoint()); //精确寻找
 		else
-			temp->direction = temp->EnemyDirection(Point(15, 6));
+			temp->direction = temp->EnemyDirection2(Point(15, 6)); //精确寻找老家
 		
 	}
 }

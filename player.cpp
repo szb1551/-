@@ -1,6 +1,6 @@
-#include "player.h"
-#include "collide.h"
-#include "enemy.h"
+#include "bin/player.h"
+#include "bin/collide.h"
+#include "bin/enemy.h"
 
 extern AllObjects All_Ob;
 extern int mapIndex[rows][cols];
